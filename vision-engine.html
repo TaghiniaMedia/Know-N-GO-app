@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>See & Say</title>
+<style>
+  :root {
+    --bg: #0f1216;
+    --panel: #1a1f26;
+    --text: #f2f3f5;
+    --muted: #a7b0bb;
+    --accent: #4fa3ff;
+    --good: #4caf82;
+    --warn: #e0a840;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    padding: 24px 16px 80px;
+  }
+  h1 {
+    font-size: 1.6rem;
+    margin: 0 0 4px;
+  }
+  p.tagline {
+    color: var(--muted);
+    margin: 0 0 20px;
+    font-size: 1rem;
+  }
+  p.intro {
+    color: var(--text);
+    background: var(--panel);
+    border-left: 3px solid var(--accent);
+    padding: 14px 16px;
+    border-radius: 8px;
+    margin: 0 0 28px;
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+  button {
+    font-size: 1.1rem;
+    font-weight: 600;
+    padding: 18px 20px;
+    border-radius: 14px;
+    border: none;
+    width: 100%;
+    margin-bottom: 14px;
+    cursor: pointer;
+    min-height: 56px;
+  }
+  #capture-btn {
+    background: var(--accent);
+    color: #05131f;
+  }
+  #ask-btn {
+    background: var(--panel);
+    color: var(--text);
+    border: 1px solid #333c46;
+  }
+  label {
+    display: block;
+    font-size: 0.95rem;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  input[type="text"] {
+    width: 100%;
+    padding: 14px;
+    border-radius: 10px;
+    border: 1px solid #333c46;
+    background: var(--panel);
+    color: var(--text);
+    font-size: 1rem;
+    margin-bottom: 20px;
+  }
+  #photo-preview {
+    max-width: 100%;
+    border-radius: 12px;
+    margin-bottom: 16px;
+    display: none;
+  }
+  section.result {
+    background: var(--panel);
+    border-radius: 14px;
+    padding: 18px;
+    margin-bottom: 14px;
+  }
+  section.result h2 {
+    font-size: 1rem;
+    margin: 0 0 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  section.result p {
+    margin: 0;
+    line-height: 1.5;
+    font-size: 1.05rem;
+  }
+  .confident h2 { color: var(--good); }
+  .closer h2 { color: var(--warn); }
+  .suggestion h2 { color: var(--accent); }
+  #status {
+    color: var(--muted);
+    font-size: 0.95rem;
+    margin-bottom: 16px;
+    min-height: 1.2em;
+  }
+  input[type="file"] { display: none; }
+</style>
+</head>
+<body>
+
+<h1>See & Say</h1>
+<p class="tagline">Point your camera, get the words back — read aloud.</p>
+<p class="intro">If you're new to this — new to losing your sight, new to your phone, or just tired of feeling like tech is talking down to you or over your head — you're not alone, and you're in the right place. This is here for the everyday stuff: cooking, grocery shopping, reading your mail, checking a room before you walk in, reading a sign or menu, even one in another language. Point the camera at whatever's in front of you and ask. That's it.</p>
+
+<input type="file" id="file-input" accept="image/*" capture="environment">
+<button id="capture-btn" type="button">Take or choose a photo</button>
+
+<img id="photo-preview" alt="Photo you selected, not yet described">
+
+<label for="question">Optional: ask a specific question about the photo</label>
+<input type="text" id="question" placeholder="e.g. Is this shirt clean?">
+
+<button id="ask-btn" type="button" disabled>Describe this photo</button>
+
+<div id="status" role="status" aria-live="polite"></div>
+
+<div id="results" aria-live="polite"></div>
+
+<script>
+  const fileInput = document.getElementById('file-input');
+  const captureBtn = document.getElementById('capture-btn');
+  const askBtn = document.getElementById('ask-btn');
+  const preview = document.getElementById('photo-preview');
+  const statusEl = document.getElementById('status');
+  const resultsEl = document.getElementById('results');
+  const questionInput = document.getElementById('question');
+
+  let base64Image = null;
+  let mediaType = 'image/jpeg';
+
+  captureBtn.addEventListener('click', () => fileInput.click());
+
+  fileInput.addEventListener('change', () => {
+    const file = fileInput.files[0];
+    if (!file) return;
+    mediaType = file.type || 'image/jpeg';
+    const reader = new FileReader();
+    reader.onload = () => {
+      base64Image = reader.result.split(',')[1];
+      preview.src = reader.result;
+      preview.style.display = 'block';
+      preview.alt = 'Photo selected — not yet described';
+      askBtn.disabled = false;
+      statusEl.textContent = 'Photo ready. Double-tap "Describe this photo" when ready.';
+    };
+    reader.readAsDataURL(file);
+  });
+
+  function speak(text) {
+    try {
+      const utter = new SpeechSynthesisUtterance(text);
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(utter);
+    } catch (e) { /* speech not available, VoiceOver will still read aria-live regions */ }
+  }
+
+  function renderResult(label, text, cssClass) {
+    const section = document.createElement('section');
+    section.className = 'result ' + cssClass;
+    const h2 = document.createElement('h2');
+    h2.textContent = label;
+    const p = document.createElement('p');
+    p.textContent = text;
+    section.appendChild(h2);
+    section.appendChild(p);
+    resultsEl.appendChild(section);
+  }
+
+  askBtn.addEventListener('click', async () => {
+    if (!base64Image) return;
+    resultsEl.innerHTML = '';
+    statusEl.textContent = 'Looking at your photo...';
+    askBtn.disabled = true;
+
+    const userQuestion = questionInput.value.trim();
+    const promptText = `You are a description engine for a blind user. Look at this photo and respond ONLY with a JSON object with four keys:
+"confident" (what you can clearly see — objects, setting, condition, and any visible text, translated to English if it's in another language),
+"hazard" (if you see anything potentially harmful — a spider, scorpion, snake, spill, tripping hazard, an appliance left on, etc — flag it clearly here and say to back away or get it checked; if nothing looks hazardous, say "Nothing hazardous spotted"),
+"needs_closer_photo" (anything you are not confident about — be honest, say "Nothing — the photo is clear" if there is nothing uncertain),
+"suggestion" (one practical next action for the user — if this looks like a product, price tag, or grocery item, mention it could be ordered through a grocery delivery app or Amazon; if it's a sign or menu in another language, offer to translate more of it).
+${userQuestion ? 'The user specifically asked: "' + userQuestion + '". Prioritize answering that in the confident and suggestion fields.' : ''}
+Respond with ONLY the JSON object, no markdown fences, no preamble.`;
+
+    try {
+      const response = await fetch("https://api.anthropic.com/v1/messages", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          model: "claude-sonnet-4-6",
+          max_tokens: 1000,
+          messages: [
+            {
+              role: "user",
+              content: [
+                { type: "image", source: { type: "base64", media_type: mediaType, data: base64Image } },
+                { type: "text", text: promptText }
+              ]
+            }
+          ]
+        })
+      });
+
+      const data = await response.json();
+      const textBlock = data.content.find(item => item.type === 'text');
+      let parsed;
+      try {
+        const clean = (textBlock?.text || '').replace(/```json|```/g, '').trim();
+        parsed = JSON.parse(clean);
+      } catch (e) {
+        parsed = { confident: textBlock?.text || 'No description returned.', needs_closer_photo: '', suggestion: '' };
+      }
+
+      statusEl.textContent = 'Done.';
+      renderResult('What I can see', parsed.confident || 'Nothing detected.', 'confident');
+      if (parsed.hazard) {
+        renderResult('Heads up', parsed.hazard, 'closer');
+      }
+      if (parsed.needs_closer_photo) {
+        renderResult('Needs a closer photo', parsed.needs_closer_photo, 'closer');
+      }
+      if (parsed.suggestion) {
+        renderResult('Suggestion', parsed.suggestion, 'suggestion');
+      }
+
+      speak([parsed.confident, parsed.hazard, parsed.needs_closer_photo, parsed.suggestion].filter(Boolean).join('. '));
+    } catch (err) {
+      statusEl.textContent = 'Something went wrong reading that photo. Try again.';
+      console.error(err);
+    } finally {
+      askBtn.disabled = false;
+    }
+  });
+</script>
+
+</body>
+</html>
