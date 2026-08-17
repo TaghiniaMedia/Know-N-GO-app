@@ -1,60 +1,120 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Know N'Go</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Know N'Go</title>
+  <style>
+    :root {
+      --bg: #10151f;
+      --panel: #171d29;
+      --ink: #f2f3f5;
+      --muted: #b5becb;
+      --personal: #6fa287;
+      --pro: #c97d4b;
+    }
 
-<style>
-  :root {
-    --bg: #10151f;
-    --panel: #171d29;
-    --ink: #f2f3f5;
-    --muted: #9aa4b2;
-    --personal: #6fa287;
-    --pro: #c97d4b;
-  }
+    * {
+      box-sizing: border-box;
+    }
 
-  * {
-    box-sizing: border-box;
-  }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      padding: 32px 20px 60px;
+    }
 
-  body {
-    margin: 0;
-    background: var(--bg);
-    color: var(--ink);
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    padding: 32px 20px 60px;
-  }
+    .wrap {
+      max-width: 760px;
+      margin: 0 auto;
+    }
 
-  .wrap {
-    max-width: 760px;
-    margin: 0 auto;
-  }
+    .wordmark {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 2.2rem;
+      text-align: center;
+      margin: 0 0 8px;
+    }
 
-  .wordmark {
-    font-family: Georgia, 'Times New Roman', serif;
-    font-size: 2.1rem;
-    font-weight: 700;
-    margin: 0 0 6px;
-    text-align: center;
-  }
+    .tagline {
+      color: var(--muted);
+      font-size: 1.1rem;
+      line-height: 1.5;
+      text-align: center;
+      margin: 0 0 32px;
+    }
 
-  .tagline {
-    text-align: center;
-    color: var(--muted);
-    font-size: 1rem;
-    margin: 0 0 32px;
-  }
+    .cards {
+      display: grid;
+      gap: 20px;
+    }
 
-  .cards {
-    display: grid;
-    gap: 18px;
-  }
+    .card {
+      display: block;
+      background: var(--panel);
+      color: var(--ink);
+      text-decoration: none;
+      border: 3px solid;
+      border-radius: 18px;
+      padding: 28px 24px;
+      min-height: 150px;
+    }
 
-  .card {
-    display: block;
-    text-decoration: none;
-    color: var(--ink);
-    background: var(--panel);
-    border-radius
+    .personal {
+      border-color: var(--personal);
+    }
+
+    .professional {
+      border-color: var(--pro);
+    }
+
+    .card h2 {
+      font-size: 1.6rem;
+      margin: 0 0 10px;
+    }
+
+    .card p {
+      color: var(--muted);
+      font-size: 1.05rem;
+      line-height: 1.5;
+      margin: 0;
+    }
+
+    .card:focus {
+      outline: 4px solid white;
+      outline-offset: 4px;
+    }
+
+    footer {
+      color: var(--muted);
+      line-height: 1.5;
+      text-align: center;
+      margin-top: 32px;
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <h1 class="wordmark">Know N'Go</h1>
+    <p class="tagline">Your accessible personal and professional concierge.</p>
+
+    <div class="cards">
+      <a class="card personal" href="mailto:TaghiniaMedia@gmail.com?subject=Personal Concierge Beta">
+        <h2>Personal Concierge</h2>
+        <p>Everyday assistance designed to make life simpler, safer, and more accessible.</p>
+      </a>
+
+      <a class="card professional" href="mailto:TaghiniaMedia@gmail.com?subject=Professional Concierge Beta">
+        <h2>Professional Concierge</h2>
+        <p>Practical support for entrepreneurs, professionals, and growing businesses.</p>
+      </a>
+    </div>
+
+    <footer>
+      <p>Private beta access is coming soon.</p>
+    </footer>
+  </main>
+</body>
+</html>
