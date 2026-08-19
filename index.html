@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Know N'Go</title>
+<title>Know N'Go - Personal Concierge</title>
 
 <style>
 :root {
@@ -11,8 +11,8 @@
   --panel:#171d29;
   --ink:#f2f3f5;
   --muted:#aab2bf;
-  --personal:#6fa287;
-  --pro:#c97d4b;
+  --green:#6fa287;
+  --blue:#4d8fff;
 }
 
 * {
@@ -33,79 +33,70 @@ main {
 }
 
 h1 {
-  margin:0 0 6px;
-  font-size:46px;
-  line-height:1.05;
+  font-size:38px;
+  margin:0 0 8px;
 }
 
-.tagline {
+.subtitle {
   color:var(--muted);
-  font-size:23px;
+  font-size:20px;
   line-height:1.5;
-  margin:12px 0 48px;
+  margin-bottom:30px;
 }
 
-.card {
+label {
   display:block;
-  text-decoration:none;
-  color:var(--ink);
+  font-size:19px;
+  margin-bottom:8px;
+}
+
+input[type="text"] {
+  width:100%;
   background:var(--panel);
-  border-radius:18px;
-  padding:24px;
-  margin-bottom:22px;
-  border:3px solid transparent;
+  color:var(--ink);
+  border:2px solid var(--green);
+  border-radius:12px;
+  padding:16px;
+  font-size:20px;
+  margin-bottom:20px;
 }
 
-.card.personal {
-  border-color:var(--personal);
+button {
+  width:100%;
+  min-height:60px;
+  border:none;
+  border-radius:12px;
+  font-size:20px;
+  font-weight:700;
+  padding:15px;
+  margin-bottom:16px;
+  cursor:pointer;
 }
 
-.card.pro {
-  border-color:var(--pro);
+#takePhotoBtn {
+  background:var(--green);
+  color:white;
 }
 
-.card h2 {
-  margin:0 0 12px;
-  font-size:31px;
+#askBtn {
+  background:var(--blue);
+  color:white;
 }
 
-.card p {
-  margin:0;
-  color:var(--muted);
-  font-size:21px;
-  line-height:1.5;
+#askBtn:disabled {
+  opacity:.5;
 }
 
-.card:focus {
-  outline:4px solid white;
-  outline-offset:4px;
+input[type="file"] {
+  display:none;
 }
-</style>
-</head>
 
-<body>
-<main>
+#preview {
+  width:100%;
+  border-radius:12px;
+  display:none;
+  margin-bottom:18px;
+}
 
-<h1>Know N'Go</h1>
-
-<p class="tagline">
-Your personal AI concierge. Ask. See. Know. Go.
-</p>
-
-<a class="card personal" href="vision-engine.html" aria-label="Personal Concierge">
-  <h2>Personal Concierge</h2>
-  <p>
-    Ask questions, take or upload a photo, and get help understanding what is around you.
-  </p>
-</a>
-
-<a class="card pro" href="pro-dashboard.html" aria-label="Professional Concierge">
-  <h2>Professional Concierge</h2>
-  <p>
-    Get AI-powered help for business, work, organization, and productivity.
-  </p>
-</a>
-
-</main>
-</body>
-</html>
+#status {
+  color:
