@@ -6,174 +6,181 @@
 <title>Know N'Go</title>
 
 <style>
-  :root {
-    --bg: #10151f;
-    --panel: #171d29;
-    --ink: #f2f3f5;
-    --muted: #9aa4b2;
-    --personal: #6fa287;
-    --pro: #c97d4b;
-  }
+:root {
+  --bg:#10151f;
+  --panel:#171d29;
+  --ink:#f2f3f5;
+  --muted:#aab2bf;
+  --personal:#6fa287;
+  --pro:#c97d4b;
+  --blue:#4d8fff;
+  --danger:#ff7b7b;
+}
 
-  * {
-    box-sizing: border-box;
-  }
+* {
+  box-sizing:border-box;
+}
 
-  body {
-    margin: 0;
-    background: var(--bg);
-    color: var(--ink);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    padding: 32px 20px 60px;
-  }
+body {
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  padding:28px 18px 60px;
+}
 
-  .wrap {
-    max-width: 760px;
-    margin: 0 auto;
-  }
+main {
+  max-width:760px;
+  margin:auto;
+}
 
-  .logo {
-    text-align: center;
-    font-size: 48px;
-    margin-bottom: 12px;
-  }
+h1 {
+  margin:0 0 6px;
+  font-size:2rem;
+}
 
-  h1 {
-    text-align: center;
-    font-size: 2.2rem;
-    margin: 0 0 8px;
-  }
+h2 {
+  margin-top:0;
+}
 
-  .tagline {
-    text-align: center;
-    color: var(--muted);
-    font-size: 1.05rem;
-    line-height: 1.5;
-    margin: 0 0 36px;
-  }
+p {
+  line-height:1.5;
+}
 
-  .card {
-    display: block;
-    text-decoration: none;
-    color: var(--ink);
-    background: var(--panel);
-    border-radius: 18px;
-    padding: 26px 22px;
-    margin-bottom: 20px;
-    min-height: 150px;
-  }
+.tagline {
+  color:var(--muted);
+  margin:0 0 28px;
+}
 
-  .card:focus {
-    outline: 4px solid white;
-    outline-offset: 4px;
-  }
+.card {
+  width:100%;
+  text-align:left;
+  background:var(--panel);
+  color:var(--ink);
+  border:0;
+  border-left:5px solid;
+  border-radius:16px;
+  padding:22px;
+  margin-bottom:18px;
+  font-size:1rem;
+}
 
-  .personal {
-    border-left: 6px solid var(--personal);
-  }
+.card.personal {
+  border-left-color:var(--personal);
+}
 
-  .pro {
-    border-left: 6px solid var(--pro);
-  }
+.card.pro {
+  border-left-color:var(--pro);
+}
 
-  .label {
-    font-size: 0.85rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    margin-bottom: 8px;
-  }
+.card-title {
+  display:block;
+  font-size:1.35rem;
+  font-weight:700;
+  margin-bottom:8px;
+}
 
-  .personal .label {
-    color: var(--personal);
-  }
+.card-text {
+  display:block;
+  color:var(--muted);
+  line-height:1.5;
+}
 
-  .pro .label {
-    color: var(--pro);
-  }
+button,
+input,
+textarea {
+  font:inherit;
+}
 
-  h2 {
-    margin: 0 0 10px;
-    font-size: 1.5rem;
-  }
+.action {
+  width:100%;
+  min-height:58px;
+  border:0;
+  border-radius:12px;
+  padding:15px;
+  margin:8px 0;
+  font-weight:700;
+  font-size:1.05rem;
+}
 
-  .description {
-    margin: 0;
-    color: var(--muted);
-    line-height: 1.55;
-    font-size: 1rem;
-  }
+.primary {
+  background:var(--personal);
+  color:#07120d;
+}
 
-  .open {
-    display: block;
-    margin-top: 18px;
-    font-weight: 700;
-    font-size: 1rem;
-  }
+.secondary {
+  background:#293345;
+  color:var(--ink);
+}
 
-  .personal .open {
-    color: var(--personal);
-  }
+.send {
+  background:var(--blue);
+  color:white;
+}
 
-  .pro .open {
-    color: var(--pro);
-  }
+.back {
+  background:transparent;
+  color:var(--ink);
+  border:1px solid #465065;
+}
 
-  .beta {
-    text-align: center;
-    color: var(--muted);
-    font-size: 0.9rem;
-    margin-top: 30px;
-    line-height: 1.5;
-  }
-</style>
-</head>
+textarea {
+  width:100%;
+  min-height:110px;
+  background:#0c1119;
+  color:var(--ink);
+  border:2px solid #404b60;
+  border-radius:12px;
+  padding:14px;
+  margin:8px 0 10px;
+  resize:vertical;
+}
 
-<body>
-<main class="wrap">
+label {
+  display:block;
+  font-weight:700;
+  margin-top:20px;
+}
 
-  <div class="logo" aria-hidden="true">◎</div>
+.screen {
+  display:none;
+}
 
-  <h1>Know N'Go</h1>
+.screen.active {
+  display:block;
+}
 
-  <p class="tagline">
-    Your AI concierge for everyday life.
-    Ask, understand, and get things done.
-  </p>
+#photoPreview {
+  width:100%;
+  max-height:420px;
+  object-fit:contain;
+  border-radius:12px;
+  margin:14px 0;
+  display:none;
+}
 
-  <a
-    class="card personal"
-    href="vision-engine.html"
-    aria-label="Open Know N'Go Personal"
-  >
-    <div class="label">Personal</div>
-    <h2>Know N'Go Personal</h2>
-    <p class="description">
-      Get help understanding what is around you, handling everyday tasks,
-      answering questions, and making life easier.
-    </p>
-    <span class="open">Open Personal →</span>
-  </a>
+#status {
+  margin:16px 0;
+  color:var(--muted);
+  min-height:24px;
+}
 
-  <a
-    class="card pro"
-    href="pro-dashboard.html"
-    aria-label="Open Know N'Go Pro"
-  >
-    <div class="label">Professional</div>
-    <h2>Know N'Go Pro</h2>
-    <p class="description">
-      AI-powered assistance for professionals, business tasks,
-      communication, organization, and productivity.
-    </p>
-    <span class="open">Open Pro →</span>
-  </a>
+.result {
+  background:var(--panel);
+  border-left:5px solid var(--personal);
+  border-radius:12px;
+  padding:16px;
+  margin-top:14px;
+}
 
-  <p class="beta">
-    Know N'Go is currently in private beta.
-    Additional concierge features are coming soon.
-  </p>
+.result h3 {
+  margin:0 0 8px;
+}
 
-</main>
-</body>
-</html>
+.notice {
+  background:var(--panel);
+  border-radius:12px;
+  padding:16px;
+  color:var(--muted);
+  margin:16px 0;
+}
