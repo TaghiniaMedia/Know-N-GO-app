@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Know N'Go</title>
-
 <style>
 :root {
   --bg:#10151f;
@@ -14,44 +13,30 @@
   --personal:#6fa287;
   --pro:#c97d4b;
   --blue:#4d8fff;
-  --danger:#ff7b7b;
 }
-
 * {
   box-sizing:border-box;
 }
-
 body {
   margin:0;
   background:var(--bg);
   color:var(--ink);
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-  padding:28px 18px 60px;
+  padding:20px 18px 60px;
 }
-
 main {
   max-width:760px;
   margin:auto;
 }
-
 h1 {
   margin:0 0 6px;
   font-size:2rem;
 }
-
-h2 {
-  margin-top:0;
-}
-
-p {
-  line-height:1.5;
-}
-
 .tagline {
   color:var(--muted);
   margin:0 0 28px;
+  line-height:1.5;
 }
-
 .card {
   width:100%;
   text-align:left;
@@ -64,34 +49,27 @@ p {
   margin-bottom:18px;
   font-size:1rem;
 }
-
 .card.personal {
   border-left-color:var(--personal);
 }
-
 .card.pro {
   border-left-color:var(--pro);
 }
-
 .card-title {
   display:block;
   font-size:1.35rem;
   font-weight:700;
   margin-bottom:8px;
 }
-
 .card-text {
   display:block;
   color:var(--muted);
   line-height:1.5;
 }
-
 button,
-input,
 textarea {
   font:inherit;
 }
-
 .action {
   width:100%;
   min-height:58px;
@@ -102,28 +80,24 @@ textarea {
   font-weight:700;
   font-size:1.05rem;
 }
-
+.home-button {
+  background:#293345;
+  color:var(--ink);
+  border:2px solid #657086;
+  margin-bottom:22px;
+}
 .primary {
   background:var(--personal);
   color:#07120d;
 }
-
 .secondary {
   background:#293345;
   color:var(--ink);
 }
-
 .send {
   background:var(--blue);
   color:white;
 }
-
-.back {
-  background:transparent;
-  color:var(--ink);
-  border:1px solid #465065;
-}
-
 textarea {
   width:100%;
   min-height:110px;
@@ -135,21 +109,17 @@ textarea {
   margin:8px 0 10px;
   resize:vertical;
 }
-
 label {
   display:block;
   font-weight:700;
   margin-top:20px;
 }
-
 .screen {
   display:none;
 }
-
 .screen.active {
   display:block;
 }
-
 #photoPreview {
   width:100%;
   max-height:420px;
@@ -158,13 +128,11 @@ label {
   margin:14px 0;
   display:none;
 }
-
 #status {
   margin:16px 0;
   color:var(--muted);
   min-height:24px;
 }
-
 .result {
   background:var(--panel);
   border-left:5px solid var(--personal);
@@ -172,11 +140,9 @@ label {
   padding:16px;
   margin-top:14px;
 }
-
 .result h3 {
   margin:0 0 8px;
 }
-
 .notice {
   background:var(--panel);
   border-radius:12px;
@@ -184,489 +150,26 @@ label {
   color:var(--muted);
   margin:16px 0;
 }
-
 input[type="file"] {
   display:none;
 }
 </style>
 </head>
-
 <body>
 <main>
-
 <section id="home" class="screen active" aria-labelledby="homeTitle">
-  <h1 id="homeTitle">Know N'Go</h1>
-  <p class="tagline">Your personal AI concierge. Ask. See. Know. Go.</p>
-
-  <button class="card personal" type="button" onclick="showScreen('personal')">
-    <span class="card-title">Personal Concierge</span>
-    <span class="card-text">
-      Ask questions, take or upload a photo, and get help understanding what is around you.
-    </span>
-  </button>
-
-  <button class="card pro" type="button" onclick="showScreen('professional')">
-    <span class="card-title">Professional Concierge</span>
-    <span class="card-text">
-      AI assistance for work, business, communication, organization, and everyday professional tasks.
-    </span>
-  </button>
-</section>
-
-
-<section id="personal" class="screen" aria-labelledby="personalTitle">
-
-  <button class="action back" type="button" onclick="showScreen('home')">
-    Back to Home
-  </button>
-
-  <h1 id="personalTitle">Personal Concierge</h1>
+  <h1 id="homeTitle" tabindex="-1">Know N'Go</h1>
   <p class="tagline">
-    Take a photo or choose one from your phone. You can also ask a specific question about it.
+    Your personal AI concierge. Ask. See. Know. Go.
   </p>
-
-  <label for="question">
-    What would you like to know?
-  </label>
-
-  <textarea
-    id="question"
-    placeholder="Example: What is in front of me? Is this food expired? What does this letter say?"
-    aria-describedby="questionHelp"></textarea>
-
-  <p id="questionHelp" class="tagline">
-    A photo is currently required for AI responses. Text-only concierge is being connected next.
-  </p>
-
-  <button id="cameraButton" class="action primary" type="button">
-    Take Photo
+<span class="card-title">
+  Personal Concierge
+</span>
+<span class="card-text">
+  Ask questions, take or upload a photo, and get help understanding what is around you.
+</span>
   </button>
-
-  <input
-    id="cameraInput"
-    type="file"
-    accept="image/*"
-    capture="environment">
-
-  <button id="uploadButton" class="action secondary" type="button">
-    Choose Photo
-  </button>
-
-  <input
-    id="uploadInput"
-    type="file"
-    accept="image/*">
-
-  <img
-    id="photoPreview"
-    alt="Selected photo ready to be described">
-
-  <button id="sendButton" class="action send" type="button">
-    Describe Photo
-  </button>
-
-  <button id="clearButton" class="action secondary" type="button">
-    Start Over
-  </button>
-
-  <div
-    id="status"
-    role="status"
-    aria-live="polite"></div>
-
-  <div
-    id="results"
-    aria-live="polite"></div>
-
-</section>
-
-
-<section id="professional" class="screen" aria-labelledby="professionalTitle">
-
-  <button class="action back" type="button" onclick="showScreen('home')">
-    Back to Home
-  </button>
-
-  <h1 id="professionalTitle">Professional Concierge</h1>
-
-  <div class="notice">
-    Professional Concierge is being prepared for beta testing.
-  </div>
-
-  <div class="result">
-    <h3>Writing and Communication</h3>
-    <p>Emails, messages, summaries, replies, and professional writing.</p>
-  </div>
-
-  <div class="result">
-    <h3>Business Assistance</h3>
-    <p>Research, organization, planning, client support, and everyday business tasks.</p>
-  </div>
-
-  <div class="result">
-    <h3>Vision Assistance</h3>
-    <p>Use photos to understand documents, products, spaces, signs, and other visual information.</p>
-  </div>
-
-</section>
-
-</main>
-
-<script>
-const BACKEND_URL =
-  "https://see-and-say-server-1.onrender.com/describe";
-
-const cameraButton =
-  document.getElementById("cameraButton");
-
-const cameraInput =
-  document.getElementById("cameraInput");
-
-const uploadButton =
-  document.getElementById("uploadButton");
-
-const uploadInput =
-  document.getElementById("uploadInput");
-
-const preview =
-  document.getElementById("photoPreview");
-
-const sendButton =
-  document.getElementById("sendButton");
-
-const clearButton =
-  document.getElementById("clearButton");
-
-const question =
-  document.getElementById("question");
-
-const statusEl =
-  document.getElementById("status");
-
-const resultsEl =
-  document.getElementById("results");
-
-let selectedImage = null;
-
-
-function showScreen(name) {
-
-  document.querySelectorAll(".screen")
-    .forEach(screen =>
-      screen.classList.remove("active")
-    );
-
-  const screen =
-    document.getElementById(name);
-
-  screen.classList.add("active");
-
-  const heading =
-    screen.querySelector("h1");
-
-  if (heading) {
-    heading.setAttribute("tabindex","-1");
-    heading.focus();
-  }
-
-  window.scrollTo(0,0);
-}
-
-
-cameraButton.addEventListener(
-  "click",
-  () => cameraInput.click()
-);
-
-
-uploadButton.addEventListener(
-  "click",
-  () => uploadInput.click()
-);
-
-
-cameraInput.addEventListener(
-  "change",
-  () => handlePhoto(cameraInput.files[0])
-);
-
-
-uploadInput.addEventListener(
-  "change",
-  () => handlePhoto(uploadInput.files[0])
-);
-
-
-function handlePhoto(file) {
-
-  if (!file) return;
-
-  if (!file.type.startsWith("image/")) {
-    announce("Please choose an image.");
-    return;
-  }
-
-  const reader =
-    new FileReader();
-
-  announce("Preparing photo.");
-
-  reader.onload = () => {
-
-    selectedImage =
-      reader.result.split(",")[1];
-
-    preview.src =
-      reader.result;
-
-    preview.style.display =
-      "block";
-
-    announce(
-      "Photo ready. Double-tap Describe Photo when ready."
-    );
-  };
-
-  reader.onerror = () => {
-    announce(
-      "The photo could not be opened. Please try another photo."
-    );
-  };
-
-  reader.readAsDataURL(file);
-}
-
-
-sendButton.addEventListener(
-  "click",
-  async () => {
-
-    if (!selectedImage) {
-
-      announce(
-        "Please take or choose a photo first."
-      );
-
-      return;
-    }
-
-    sendButton.disabled = true;
-
-    resultsEl.innerHTML = "";
-
-    announce(
-      "Looking at your photo."
-    );
-
-    try {
-
-      const response =
-        await fetch(
-          BACKEND_URL,
-          {
-            method:"POST",
-            headers:{
-              "Content-Type":"application/json"
-            },
-            body:JSON.stringify({
-              image:selectedImage,
-              question:
-                question.value.trim() || null
-            })
-          }
-        );
-
-      if (!response.ok) {
-
-        throw new Error(
-          "Server error " + response.status
-        );
-      }
-
-      const data =
-        await response.json();
-
-      displayResults(data);
-
-    }
-
-    catch(error) {
-
-      console.error(error);
-
-      announce(
-        "The AI service could not complete the request. Please try again."
-      );
-    }
-
-    finally {
-
-      sendButton.disabled = false;
-    }
-  }
-);
-
-
-function displayResults(data) {
-
-  resultsEl.innerHTML = "";
-
-  const seeing =
-    data.whatICanSee ||
-    data.seeing ||
-    data.description ||
-    data.answer ||
-    "";
-
-  const closer =
-    data.needsCloserPhoto ||
-    data.closer ||
-    "";
-
-  const suggestion =
-    data.suggestion ||
-    "";
-
-  let spoken = [];
-
-  if (seeing) {
-    addResult(
-      "What I can see",
-      seeing
-    );
-    spoken.push(seeing);
-  }
-
-  if (closer) {
-    addResult(
-      "Closer photo may help",
-      closer
-    );
-    spoken.push(closer);
-  }
-
-  if (suggestion) {
-    addResult(
-      "Suggestion",
-      suggestion
-    );
-    spoken.push(suggestion);
-  }
-
-  if (!spoken.length) {
-
-    addResult(
-      "Result",
-      "The service responded, but no description was returned."
-    );
-
-    spoken.push(
-      "No description was returned."
-    );
-  }
-
-  statusEl.textContent =
-    "Description complete.";
-
-  speak(
-    spoken.join(". ")
-  );
-}
-
-
-function addResult(title,text) {
-
-  const section =
-    document.createElement("section");
-
-  section.className =
-    "result";
-
-  const heading =
-    document.createElement("h3");
-
-  heading.textContent =
-    title;
-
-  const paragraph =
-    document.createElement("p");
-
-  paragraph.textContent =
-    text;
-
-  section.appendChild(
-    heading
-  );
-
-  section.appendChild(
-    paragraph
-  );
-
-  resultsEl.appendChild(
-    section
-  );
-}
-
-
-clearButton.addEventListener(
-  "click",
-  () => {
-
-    selectedImage = null;
-
-    cameraInput.value = "";
-
-    uploadInput.value = "";
-
-    question.value = "";
-
-    preview.src = "";
-
-    preview.style.display =
-      "none";
-
-    resultsEl.innerHTML = "";
-
-    announce(
-      "Cleared. Ready for a new question or photo."
-    );
-
-    question.focus();
-  }
-);
-
-
-function announce(message) {
-
-  statusEl.textContent =
-    message;
-}
-
-
-function speak(text) {
-
-  if (!text) return;
-
-  try {
-
-    window.speechSynthesis.cancel();
-
-    const speech =
-      new SpeechSynthesisUtterance(text);
-
-    speech.rate = 1;
-
-    window.speechSynthesis.speak(
-      speech
-    );
-
-  }
-
-  catch(error) {
-    console.error(error);
-  }
-}
-</script>
-
-</body>
-</html>
+<span class="card-title">
+  Professional Concierge
+</span>
+<span class="
