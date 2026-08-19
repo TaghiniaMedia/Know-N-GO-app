@@ -1,153 +1,161 @@
-const express = require('express');
-const cors = require('cors');
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Know N'Go</title>
 
-const app = express();
-
-app.use(cors());
-app.use(express.json({ limit: '15mb' }));
-
-const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
-
-function textPrompt(question) {
-  return `You are Know N'Go, a helpful personal AI concierge.
-
-Answer the user's question clearly, directly, and conversationally.
-
-User question: "${question}"
-
-Respond with ONLY valid JSON in this format:
-{"answer":"your response here"}`;
+<style>
+:root {
+  --bg:#10151f;
+  --panel:#171d29;
+  --ink:#f2f3f5;
+  --muted:#aab2bf;
+  --personal:#6fa287;
+  --pro:#c97d4b;
 }
 
-function photoPrompt(question) {
-  return `You are Know N'Go, a visual assistant.
-
-Look carefully at the photo and respond ONLY with valid JSON using these keys:
-
-"confident": what you can clearly see and the answer to the user's question,
-"hazard": any possible danger, or "Nothing hazardous spotted",
-"needs_closer_photo": anything you cannot determine confidently, or "Nothing — the photo is clear",
-"suggestion": one useful next action.
-
-${question ? `The user specifically asked: "${question}". Prioritize answering that question.` : ''}
-
-Respond with ONLY the JSON object.`;
+* {
+  box-sizing:border-box;
 }
 
-app.post('/describe', async (req, res) => {
-  try {
-    const { image, mediaType, question } = req.body;
+body {
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  padding:32px 20px 60px;
+}
 
-    if (!image && !question) {
-      return res.status(400).json({
-        error: 'Please enter a question or provide a photo.'
-      });
-    }
+main {
+  max-width:760px;
+  margin:auto;
+}
 
-    let content;
+h1 {
+  text-align:center;
+  font-size:2.4rem;
+  margin:20px 0 8px;
+}
 
-    if (image) {
-      content = [
-        {
-          type: 'image',
-          source: {
-            type: 'base64',
-            media_type: mediaType || 'image/jpeg',
-            data: image
-          }
-        },
-        {
-          type: 'text',
-          text: photoPrompt(question)
-        }
-      ];
-    } else {
-      content = [
-        {
-          type: 'text',
-          text: textPrompt(question)
-        }
-      ];
-    }
+.tagline {
+  text-align:center;
+  color:var(--muted);
+  font-size:1.05rem;
+  line-height:1.5;
+  margin:0 0 36px;
+}
 
-    const response = await fetch(
-      'https://api.anthropic.com/v1/messages',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': ANTHROPIC_API_KEY,
-          'anthropic-version': '2023-06-01'
-        },
-        body: JSON.stringify({
-          model: 'claude-sonnet-4-6',
-          max_tokens: 1000,
-          messages: [
-            {
-              role: 'user',
-              content: content
-            }
-          ]
-        })
-      }
-    );
+.card {
+  display:block;
+  text-decoration:none;
+  color:var(--ink);
+  background:var(--panel);
+  padding:24px 20px;
+  margin-bottom:20px;
+  border-radius:16px;
+  border-left:6px solid transparent;
+}
 
-    const data = await response.json();
+.card:focus {
+  outline:4px solid white;
+  outline-offset:3px;
+}
 
-    if (!response.ok) {
-      console.error('Anthropic API error:', data);
+.personal {
+  border-left-color:var(--personal);
+}
 
-      return res.status(502).json({
-        error: 'The AI service had a problem. Please try again.'
-      });
-    }
+.pro {
+  border-left-color:var(--pro);
+}
 
-    const textBlock =
-      (data.content || []).find(
-        item => item.type === 'text'
-      );
+.label {
+  display:block;
+  font-size:.8rem;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  margin-bottom:8px;
+}
 
-    const raw =
-      textBlock?.text || '';
+.personal .label {
+  color:var(--personal);
+}
 
-    try {
-      const clean =
-        raw
-          .replace(/```json/g, '')
-          .replace(/```/g, '')
-          .trim();
+.pro .label {
+  color:var(--pro);
+}
 
-      const parsed =
-        JSON.parse(clean);
+h2 {
+  margin:0 0 10px;
+  font-size:1.5rem;
+}
 
-      res.json(parsed);
+.card p {
+  margin:0;
+  color:var(--muted);
+  line-height:1.5;
+}
 
-    } catch (error) {
+.open {
+  display:block;
+  margin-top:16px;
+  font-weight:700;
+}
 
-      res.json({
-        answer: raw || 'No response was returned.'
-      });
-    }
+.personal .open {
+  color:var(--personal);
+}
 
-  } catch (error) {
+.pro .open {
+  color:var(--pro);
+}
+</style>
+</head>
 
-    console.error('Server error:', error);
+<body>
+<main>
 
-    res.status(500).json({
-      error: 'Something went wrong. Please try again.'
-    });
-  }
-});
+<h1>Know N'Go</h1>
 
-app.get('/health', (req, res) => {
-  res.send('ok');
-});
+<p class="tagline">
+Your personal AI concierge.<br>
+Ask. See. Understand. Go.
+</p>
 
-const PORT =
-  process.env.PORT || 3000;
+<a class="card personal"
+   href="vision-engine.html"
+   aria-label="Open Know N'Go Personal">
 
-app.listen(PORT, () => {
-  console.log(
-    `Know N'Go server running on port ${PORT}`
-  );
-});
+<span class="label">Personal</span>
+
+<h2>For Me</h2>
+
+<p>
+Ask questions, take a photo, and get clear help understanding what is around you.
+</p>
+
+<span class="open">Open Personal</span>
+
+</a>
+
+<a class="card pro"
+   href="pro-dashboard.html"
+   aria-label="Open Know N'Go Business">
+
+<span class="label">Business</span>
+
+<h2>For My Business</h2>
+
+<p>
+AI assistance for everyday business tasks, clients, communication, and productivity.
+</p>
+
+<span class="open">Open Business</span>
+
+</a>
+
+</main>
+</body>
+</html>
