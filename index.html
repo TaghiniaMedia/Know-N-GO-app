@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Know N'Go</title>
+
 <style>
 :root {
   --bg:#10151f;
@@ -12,164 +13,99 @@
   --muted:#aab2bf;
   --personal:#6fa287;
   --pro:#c97d4b;
-  --blue:#4d8fff;
 }
+
 * {
   box-sizing:border-box;
 }
+
 body {
   margin:0;
   background:var(--bg);
   color:var(--ink);
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-  padding:20px 18px 60px;
+  padding:28px 18px 60px;
 }
+
 main {
   max-width:760px;
   margin:auto;
 }
+
 h1 {
   margin:0 0 6px;
-  font-size:2rem;
+  font-size:46px;
+  line-height:1.05;
 }
+
 .tagline {
   color:var(--muted);
-  margin:0 0 28px;
+  font-size:23px;
   line-height:1.5;
+  margin:12px 0 48px;
 }
+
 .card {
-  width:100%;
-  text-align:left;
-  background:var(--panel);
+  display:block;
+  text-decoration:none;
   color:var(--ink);
-  border:0;
-  border-left:5px solid;
-  border-radius:16px;
-  padding:22px;
-  margin-bottom:18px;
-  font-size:1rem;
+  background:var(--panel);
+  border-radius:18px;
+  padding:24px;
+  margin-bottom:22px;
+  border:3px solid transparent;
 }
+
 .card.personal {
-  border-left-color:var(--personal);
+  border-color:var(--personal);
 }
+
 .card.pro {
-  border-left-color:var(--pro);
+  border-color:var(--pro);
 }
-.card-title {
-  display:block;
-  font-size:1.35rem;
-  font-weight:700;
-  margin-bottom:8px;
+
+.card h2 {
+  margin:0 0 12px;
+  font-size:31px;
 }
-.card-text {
-  display:block;
+
+.card p {
+  margin:0;
   color:var(--muted);
+  font-size:21px;
   line-height:1.5;
 }
-button,
-textarea {
-  font:inherit;
-}
-.action {
-  width:100%;
-  min-height:58px;
-  border:0;
-  border-radius:12px;
-  padding:15px;
-  margin:8px 0;
-  font-weight:700;
-  font-size:1.05rem;
-}
-.home-button {
-  background:#293345;
-  color:var(--ink);
-  border:2px solid #657086;
-  margin-bottom:22px;
-}
-.primary {
-  background:var(--personal);
-  color:#07120d;
-}
-.secondary {
-  background:#293345;
-  color:var(--ink);
-}
-.send {
-  background:var(--blue);
-  color:white;
-}
-textarea {
-  width:100%;
-  min-height:110px;
-  background:#0c1119;
-  color:var(--ink);
-  border:2px solid #404b60;
-  border-radius:12px;
-  padding:14px;
-  margin:8px 0 10px;
-  resize:vertical;
-}
-label {
-  display:block;
-  font-weight:700;
-  margin-top:20px;
-}
-.screen {
-  display:none;
-}
-.screen.active {
-  display:block;
-}
-#photoPreview {
-  width:100%;
-  max-height:420px;
-  object-fit:contain;
-  border-radius:12px;
-  margin:14px 0;
-  display:none;
-}
-#status {
-  margin:16px 0;
-  color:var(--muted);
-  min-height:24px;
-}
-.result {
-  background:var(--panel);
-  border-left:5px solid var(--personal);
-  border-radius:12px;
-  padding:16px;
-  margin-top:14px;
-}
-.result h3 {
-  margin:0 0 8px;
-}
-.notice {
-  background:var(--panel);
-  border-radius:12px;
-  padding:16px;
-  color:var(--muted);
-  margin:16px 0;
-}
-input[type="file"] {
-  display:none;
+
+.card:focus {
+  outline:4px solid white;
+  outline-offset:4px;
 }
 </style>
 </head>
+
 <body>
 <main>
-<section id="home" class="screen active" aria-labelledby="homeTitle">
-  <h1 id="homeTitle" tabindex="-1">Know N'Go</h1>
-  <p class="tagline">
-    Your personal AI concierge. Ask. See. Know. Go.
+
+<h1>Know N'Go</h1>
+
+<p class="tagline">
+Your personal AI concierge. Ask. See. Know. Go.
+</p>
+
+<a class="card personal" href="vision-engine.html" aria-label="Personal Concierge">
+  <h2>Personal Concierge</h2>
+  <p>
+    Ask questions, take or upload a photo, and get help understanding what is around you.
   </p>
-<span class="card-title">
-  Personal Concierge
-</span>
-<span class="card-text">
-  Ask questions, take or upload a photo, and get help understanding what is around you.
-</span>
-  </button>
-<span class="card-title">
-  Professional Concierge
-</span>
-<span class="
+</a>
+
+<a class="card pro" href="pro-dashboard.html" aria-label="Professional Concierge">
+  <h2>Professional Concierge</h2>
+  <p>
+    Get AI-powered help for business, work, organization, and productivity.
+  </p>
+</a>
+
+</main>
+</body>
+</html>
