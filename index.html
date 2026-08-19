@@ -34,16 +34,15 @@ main {
 
 h1 {
   text-align:center;
-  font-size:2.4rem;
-  margin:20px 0 8px;
+  margin:0 0 8px;
+  font-size:2.2rem;
 }
 
 .tagline {
   text-align:center;
   color:var(--muted);
-  font-size:1.05rem;
-  line-height:1.5;
   margin:0 0 36px;
+  font-size:1.05rem;
 }
 
 .card {
@@ -51,43 +50,21 @@ h1 {
   text-decoration:none;
   color:var(--ink);
   background:var(--panel);
-  padding:24px 20px;
+  border-radius:18px;
+  padding:26px 22px;
   margin-bottom:20px;
-  border-radius:16px;
-  border-left:6px solid transparent;
-}
-
-.card:focus {
-  outline:4px solid white;
-  outline-offset:3px;
+  border-left:6px solid;
 }
 
 .personal {
-  border-left-color:var(--personal);
+  border-color:var(--personal);
 }
 
 .pro {
-  border-left-color:var(--pro);
+  border-color:var(--pro);
 }
 
-.label {
-  display:block;
-  font-size:.8rem;
-  font-weight:700;
-  text-transform:uppercase;
-  letter-spacing:.08em;
-  margin-bottom:8px;
-}
-
-.personal .label {
-  color:var(--personal);
-}
-
-.pro .label {
-  color:var(--pro);
-}
-
-h2 {
+.card h2 {
   margin:0 0 10px;
   font-size:1.5rem;
 }
@@ -96,11 +73,12 @@ h2 {
   margin:0;
   color:var(--muted);
   line-height:1.5;
+  font-size:1rem;
 }
 
 .open {
   display:block;
-  margin-top:16px;
+  margin-top:18px;
   font-weight:700;
 }
 
@@ -118,42 +96,18 @@ h2 {
 <main>
 
 <h1>Know N'Go</h1>
+<p class="tagline">Your personal guide for everyday life.</p>
 
-<p class="tagline">
-Your personal AI concierge.<br>
-Ask. See. Understand. Go.
-</p>
-
-<a class="card personal"
-   href="vision-engine.html"
-   aria-label="Open Know N'Go Personal">
-
-<span class="label">Personal</span>
-
-<h2>For Me</h2>
-
-<p>
-Ask questions, take a photo, and get clear help understanding what is around you.
-</p>
-
-<span class="open">Open Personal</span>
-
+<a class="card personal" href="vision-engine.html" aria-label="Open Personal">
+  <h2>Personal</h2>
+  <p>Ask a question, take or upload a photo, and get help with what is in front of you.</p>
+  <span class="open">Open Personal →</span>
 </a>
 
-<a class="card pro"
-   href="pro-dashboard.html"
-   aria-label="Open Know N'Go Business">
-
-<span class="label">Business</span>
-
-<h2>For My Business</h2>
-
-<p>
-AI assistance for everyday business tasks, clients, communication, and productivity.
-</p>
-
-<span class="open">Open Business</span>
-
+<a class="card pro" href="pro-dashboard.html" aria-label="Open Professional">
+  <h2>Professional</h2>
+  <p>Tools for business, work, clients, documents, and everyday professional tasks.</p>
+  <span class="open">Open Professional →</span>
 </a>
 
 </main>
