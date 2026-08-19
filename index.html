@@ -58,7 +58,7 @@ input[type="text"] {
   border-radius:12px;
   padding:16px;
   font-size:20px;
-  margin-bottom:20px;
+  margin-bottom:16px;
 }
 
 button {
@@ -73,18 +73,14 @@ button {
   cursor:pointer;
 }
 
-#takePhotoBtn {
-  background:var(--green);
-  color:white;
-}
-
 #askBtn {
   background:var(--blue);
   color:white;
 }
 
-#askBtn:disabled {
-  opacity:.5;
+#takePhotoBtn {
+  background:var(--green);
+  color:white;
 }
 
 input[type="file"] {
@@ -99,4 +95,253 @@ input[type="file"] {
 }
 
 #status {
-  color:
+  color:var(--muted);
+  font-size:18px;
+  margin:15px 0;
+  min-height:24px;
+}
+
+.result {
+  background:var(--panel);
+  border-radius:12px;
+  padding:18px;
+  margin-top:15px;
+  font-size:19px;
+  line-height:1.5;
+}
+
+button:focus,
+input:focus {
+  outline:4px solid white;
+  outline-offset:3px;
+}
+</style>
+</head>
+
+<body>
+<main>
+
+<h1>Personal Concierge</h1>
+
+<p class="subtitle">
+Ask me anything, or take a photo and ask me about what you see.
+</p>
+
+<label for="question">What can I help you with?</label>
+
+<input
+  type="text"
+  id="question"
+  placeholder="Type your question"
+  enterkeyhint="send"
+  autocomplete="off"
+/>
+
+<button id="askBtn" type="button">
+Ask Know N'Go
+</button>
+
+<button id="takePhotoBtn" type="button">
+Take or Choose Photo
+</button>
+
+<input
+  type="file"
+  id="fileInput"
+  accept="image/*"
+  capture="environment"
+/>
+
+<img id="preview" alt="Selected photo">
+
+<div id="status" role="status" aria-live="assertive"></div>
+
+<div id="results" aria-live="polite"></div>
+
+</main>
+
+<script>
+const BACKEND_URL =
+"https://see-and-say-server-1.onrender.com/describe";
+
+const questionInput =
+document.getElementById("question");
+
+const askBtn =
+document.getElementById("askBtn");
+
+const takePhotoBtn =
+document.getElementById("takePhotoBtn");
+
+const fileInput =
+document.getElementById("fileInput");
+
+const preview =
+document.getElementById("preview");
+
+const statusEl =
+document.getElementById("status");
+
+const resultsEl =
+document.getElementById("results");
+
+let selectedImageBase64 = null;
+let mediaType = "image/jpeg";
+
+takePhotoBtn.addEventListener("click", () => {
+  fileInput.click();
+});
+
+fileInput.addEventListener("change", () => {
+
+  const file = fileInput.files[0];
+
+  if (!file) return;
+
+  mediaType = file.type || "image/jpeg";
+
+  const reader = new FileReader();
+
+  reader.onload = () => {
+
+    selectedImageBase64 =
+      reader.result.split(",")[1];
+
+    preview.src = reader.result;
+    preview.style.display = "block";
+
+    statusEl.textContent =
+      "Photo ready. Type a question or press Ask Know N'Go.";
+  };
+
+  reader.readAsDataURL(file);
+});
+
+questionInput.addEventListener("keydown", event => {
+
+  if (event.key === "Enter") {
+    event.preventDefault();
+    sendQuestion();
+  }
+});
+
+askBtn.addEventListener("click", sendQuestion);
+
+async function sendQuestion() {
+
+  const question =
+    questionInput.value.trim();
+
+  if (!question && !selectedImageBase64) {
+
+    statusEl.textContent =
+      "Type a question or choose a photo.";
+
+    questionInput.focus();
+
+    return;
+  }
+
+  askBtn.disabled = true;
+  resultsEl.innerHTML = "";
+  statusEl.textContent = "Thinking...";
+
+  try {
+
+    const response =
+      await fetch(BACKEND_URL, {
+
+        method:"POST",
+
+        headers:{
+          "Content-Type":"application/json"
+        },
+
+        body:JSON.stringify({
+          image:selectedImageBase64,
+          mediaType:mediaType,
+          question:question || null
+        })
+      });
+
+    const data =
+      await response.json();
+
+    if (!response.ok) {
+      throw new Error(
+        data.error || "Request failed"
+      );
+    }
+
+    showResults(data);
+
+  } catch (error) {
+
+    statusEl.textContent =
+      "Something went wrong. Please try again.";
+
+  } finally {
+
+    askBtn.disabled = false;
+  }
+}
+
+function showResults(data) {
+
+  statusEl.textContent = "";
+  resultsEl.innerHTML = "";
+
+  const answer =
+    data.answer ||
+    data.confident ||
+    data.whatICanSee ||
+    data.seeing ||
+    data.response ||
+    "";
+
+  const closer =
+    data.needs_closer_photo ||
+    data.needsCloserPhoto ||
+    data.closer ||
+    "";
+
+  const suggestion =
+    data.suggestion || "";
+
+  if (answer) {
+    addResult(answer);
+  }
+
+  if (closer) {
+    addResult(
+      "Needs a closer photo: " + closer
+    );
+  }
+
+  if (suggestion) {
+    addResult(suggestion);
+  }
+
+  if (!answer && !closer && !suggestion) {
+    addResult(
+      "No response was returned."
+    );
+  }
+
+  questionInput.value = "";
+}
+
+function addResult(text) {
+
+  const section =
+    document.createElement("div");
+
+  section.className = "result";
+  section.textContent = text;
+
+  resultsEl.appendChild(section);
+}
+</script>
+
+</body>
+</html>
