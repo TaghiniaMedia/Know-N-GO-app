@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Know N'Go</title>
+<title>Know N'Go Personal</title>
 
 <style>
 :root {
@@ -11,20 +11,20 @@
   --panel:#171d29;
   --ink:#f2f3f5;
   --muted:#aab2bf;
-  --personal:#6fa287;
-  --pro:#c97d4b;
+  --green:#6fa287;
+  --blue:#4d8fff;
+  --orange:#c97d4b;
+  --danger:#ff7b7b;
 }
 
-* {
-  box-sizing:border-box;
-}
+* { box-sizing:border-box; }
 
 body {
   margin:0;
   background:var(--bg);
   color:var(--ink);
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-  padding:32px 20px 60px;
+  padding:24px 18px 60px;
 }
 
 main {
@@ -32,62 +32,119 @@ main {
   margin:auto;
 }
 
-h1 {
-  text-align:center;
-  margin:0 0 8px;
-  font-size:2.2rem;
-}
-
-.tagline {
-  text-align:center;
-  color:var(--muted);
-  margin:0 0 36px;
+.home {
+  display:inline-block;
+  color:var(--ink);
+  font-weight:700;
+  margin-bottom:24px;
   font-size:1.05rem;
 }
 
-.card {
-  display:block;
-  text-decoration:none;
-  color:var(--ink);
-  background:var(--panel);
-  border-radius:18px;
-  padding:26px 22px;
-  margin-bottom:20px;
-  border-left:6px solid;
+h1 {
+  margin:0 0 8px;
+  font-size:2rem;
 }
 
-.personal {
-  border-color:var(--personal);
-}
-
-.pro {
-  border-color:var(--pro);
-}
-
-.card h2 {
-  margin:0 0 10px;
-  font-size:1.5rem;
-}
-
-.card p {
-  margin:0;
+.subtitle {
   color:var(--muted);
   line-height:1.5;
-  font-size:1rem;
+  margin-bottom:28px;
 }
 
-.open {
+label {
   display:block;
-  margin-top:18px;
   font-weight:700;
+  margin-bottom:8px;
 }
 
-.personal .open {
-  color:var(--personal);
+input[type="text"] {
+  width:100%;
+  padding:16px;
+  font-size:1.05rem;
+  border-radius:12px;
+  border:1px solid #444;
+  background:var(--panel);
+  color:var(--ink);
+  margin-bottom:20px;
 }
 
-.pro .open {
-  color:var(--pro);
+button {
+  width:100%;
+  padding:17px;
+  border:0;
+  border-radius:12px;
+  font-size:1.05rem;
+  font-weight:700;
+  margin-bottom:14px;
+}
+
+.take {
+  background:var(--green);
+  color:white;
+}
+
+.choose {
+  background:var(--orange);
+  color:white;
+}
+
+.describe {
+  background:var(--blue);
+  color:white;
+}
+
+.describe:disabled {
+  background:#343b47;
+  color:#9299a5;
+}
+
+input[type="file"] {
+  display:none;
+}
+
+#preview {
+  display:none;
+  width:100%;
+  max-height:420px;
+  object-fit:contain;
+  border-radius:12px;
+  margin:8px 0 18px;
+}
+
+#status {
+  min-height:24px;
+  color:var(--muted);
+  margin:8px 0 18px;
+}
+
+.result {
+  background:var(--panel);
+  border-left:5px solid var(--green);
+  border-radius:10px;
+  padding:16px;
+  margin-bottom:14px;
+}
+
+.result.hazard {
+  border-left-color:var(--danger);
+}
+
+.result.closer {
+  border-left-color:var(--orange);
+}
+
+.result.suggestion {
+  border-left-color:var(--blue);
+}
+
+.result h2 {
+  margin:0 0 8px;
+  font-size:1.1rem;
+}
+
+.result p {
+  margin:0;
+  line-height:1.5;
 }
 </style>
 </head>
@@ -95,21 +152,274 @@ h1 {
 <body>
 <main>
 
-<h1>Know N'Go</h1>
-<p class="tagline">Your personal guide for everyday life.</p>
+<a class="home" href="index.html">← Home</a>
 
-<a class="card personal" href="vision-engine.html" aria-label="Open Personal">
-  <h2>Personal</h2>
-  <p>Ask a question, take or upload a photo, and get help with what is in front of you.</p>
-  <span class="open">Open Personal →</span>
-</a>
+<h1>Know N'Go Personal</h1>
+<p class="subtitle">Take a new photo or choose one from your Photo Library, then ask what you want to know.</p>
 
-<a class="card pro" href="pro-dashboard.html" aria-label="Open Professional">
-  <h2>Professional</h2>
-  <p>Tools for business, work, clients, documents, and everyday professional tasks.</p>
-  <span class="open">Open Professional →</span>
-</a>
+<label for="question">Question about the photo</label>
+<input
+  type="text"
+  id="question"
+  placeholder="Example: What is this? Is this expired?"
+  autocomplete="off"
+/>
+
+<button class="take" id="takePhotoBtn" type="button">Take Photo</button>
+
+<button class="choose" id="choosePhotoBtn" type="button">Choose Photo from Library</button>
+
+<input
+  type="file"
+  id="cameraInput"
+  accept="image/*"
+  capture="environment"
+/>
+
+<input
+  type="file"
+  id="libraryInput"
+  accept="image/*"
+/>
+
+<img id="preview" alt="Selected photo preview">
+
+<button class="describe" id="askBtn" type="button" disabled>Describe Photo</button>
+
+<div id="status" role="status" aria-live="polite"></div>
+<div id="results" aria-live="polite"></div>
 
 </main>
+
+<script>
+const BACKEND_URL =
+  "https://see-and-say-server-1.onrender.com/describe";
+
+const takePhotoBtn =
+  document.getElementById("takePhotoBtn");
+
+const choosePhotoBtn =
+  document.getElementById("choosePhotoBtn");
+
+const cameraInput =
+  document.getElementById("cameraInput");
+
+const libraryInput =
+  document.getElementById("libraryInput");
+
+const preview =
+  document.getElementById("preview");
+
+const askBtn =
+  document.getElementById("askBtn");
+
+const questionInput =
+  document.getElementById("question");
+
+const statusEl =
+  document.getElementById("status");
+
+const resultsEl =
+  document.getElementById("results");
+
+let selectedImageBase64 = null;
+let selectedMediaType = "image/jpeg";
+
+takePhotoBtn.addEventListener("click", () => {
+  cameraInput.click();
+});
+
+choosePhotoBtn.addEventListener("click", () => {
+  libraryInput.click();
+});
+
+cameraInput.addEventListener("change", () => {
+  loadPhoto(cameraInput.files[0]);
+});
+
+libraryInput.addEventListener("change", () => {
+  loadPhoto(libraryInput.files[0]);
+});
+
+function loadPhoto(file) {
+  if (!file) return;
+
+  selectedMediaType =
+    file.type || "image/jpeg";
+
+  statusEl.textContent =
+    "Loading photo...";
+
+  const reader = new FileReader();
+
+  reader.onload = () => {
+    selectedImageBase64 =
+      reader.result.split(",")[1];
+
+    preview.src = reader.result;
+    preview.style.display = "block";
+
+    askBtn.disabled = false;
+
+    statusEl.textContent =
+      "Photo ready. Double-tap Describe Photo.";
+  };
+
+  reader.onerror = () => {
+    statusEl.textContent =
+      "I could not open that photo. Please try another.";
+  };
+
+  reader.readAsDataURL(file);
+}
+
+askBtn.addEventListener("click", async () => {
+  if (!selectedImageBase64) {
+    statusEl.textContent =
+      "Take or choose a photo first.";
+    return;
+  }
+
+  askBtn.disabled = true;
+  resultsEl.innerHTML = "";
+  statusEl.textContent =
+    "Looking at your photo...";
+
+  try {
+    const response =
+      await fetch(BACKEND_URL, {
+        method:"POST",
+        headers:{
+          "Content-Type":"application/json"
+        },
+        body:JSON.stringify({
+          image:selectedImageBase64,
+          mediaType:selectedMediaType,
+          question:
+            questionInput.value.trim() || null
+        })
+      });
+
+    const data =
+      await response.json();
+
+    if (!response.ok) {
+      throw new Error(
+        data.error ||
+        "Server returned " + response.status
+      );
+    }
+
+    renderResults(data);
+
+  } catch (error) {
+    console.error(error);
+
+    statusEl.textContent =
+      "I could not get a description. Please try again.";
+
+  } finally {
+    askBtn.disabled = false;
+  }
+});
+
+function renderResults(data) {
+  resultsEl.innerHTML = "";
+
+  const confident =
+    data.confident ||
+    data.whatICanSee ||
+    data.seeing ||
+    "";
+
+  const hazard =
+    data.hazard || "";
+
+  const closer =
+    data.needs_closer_photo ||
+    data.needsCloserPhoto ||
+    data.closer ||
+    "";
+
+  const suggestion =
+    data.suggestion || "";
+
+  addResult(
+    "What I can see",
+    confident,
+    ""
+  );
+
+  if (
+    hazard &&
+    hazard.toLowerCase() !==
+    "nothing hazardous spotted"
+  ) {
+    addResult(
+      "Safety Alert",
+      hazard,
+      "hazard"
+    );
+  }
+
+  if (
+    closer &&
+    !closer.toLowerCase().startsWith("nothing")
+  ) {
+    addResult(
+      "Needs a Closer Photo",
+      closer,
+      "closer"
+    );
+  }
+
+  if (suggestion) {
+    addResult(
+      "Suggestion",
+      suggestion,
+      "suggestion"
+    );
+  }
+
+  if (!resultsEl.children.length) {
+    addResult(
+      "Result",
+      "No description was returned.",
+      ""
+    );
+  }
+
+  statusEl.textContent =
+    "Description complete.";
+}
+
+function addResult(title, text, className) {
+  if (!text) return;
+
+  const section =
+    document.createElement("section");
+
+  section.className =
+    "result " + className;
+
+  const heading =
+    document.createElement("h2");
+
+  heading.textContent =
+    title;
+
+  const paragraph =
+    document.createElement("p");
+
+  paragraph.textContent =
+    text;
+
+  section.appendChild(heading);
+  section.appendChild(paragraph);
+
+  resultsEl.appendChild(section);
+}
+</script>
+
 </body>
 </html>
