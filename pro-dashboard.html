@@ -1,113 +1,191 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>See &amp; Say — For Business</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Know N'Go Business</title>
+
 <style>
-  :root {
-    --bg: #10151f;
-    --panel: #171d29;
-    --ink: #f2f3f5;
-    --muted: #9aa4b2;
-    --pro: #c97d4b;
-  }
-  * { box-sizing: border-box; }
-  body {
-    margin: 0;
-    background: var(--bg);
-    color: var(--ink);
-    font-family: -apple-system, system-ui, sans-serif;
-    padding: 0 0 60px;
-  }
-  header {
-    background: linear-gradient(135deg, #1c130c, #171d29);
-    border-bottom: 3px solid var(--pro);
-    padding: 28px 20px 22px;
-  }
-  header .eyebrow {
-    font-family: 'Courier New', monospace;
-    font-size: 0.72rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--pro);
-    display: block;
-    margin-bottom: 6px;
-  }
-  header h1 {
-    font-family: Georgia, serif;
-    margin: 0;
-    font-size: 1.7rem;
-  }
-  main {
-    padding: 24px 20px 0;
-  }
-  .card {
-    background: var(--panel);
-    border-radius: 14px;
-    padding: 20px;
-    margin-bottom: 16px;
-    border-left: 4px solid var(--pro);
-  }
-  .card h2 {
-    margin: 0 0 8px;
-    font-size: 1.1rem;
-  }
-  .card p {
-    margin: 0;
-    color: var(--muted);
-    font-size: 0.95rem;
-    line-height: 1.5;
-  }
-  .status {
-    display: inline-block;
-    font-family: 'Courier New', monospace;
-    font-size: 0.7rem;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    background: rgba(201, 125, 75, 0.15);
-    color: var(--pro);
-    padding: 3px 8px;
-    border-radius: 6px;
-    margin-bottom: 10px;
-  }
-  a.back {
-    display: inline-block;
-    margin: 24px 20px 0;
-    color: var(--muted);
-    text-decoration: none;
-    font-size: 0.9rem;
-  }
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --bg: #10151f;
+  --panel: #171d28;
+  --text: #f4f6f8;
+  --muted: #c7ccd4;
+  --accent: #f2a65a;
+  --border: #394354;
+}
+
+body {
+  margin: 0;
+  padding: 32px 20px 80px;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 18px;
+}
+
+main {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.back {
+  display: inline-block;
+  color: var(--text);
+  text-decoration: none;
+  font-size: 20px;
+  font-weight: 700;
+  padding: 14px 0;
+  margin-bottom: 28px;
+}
+
+h1 {
+  font-size: 36px;
+  margin: 0 0 12px;
+}
+
+.intro {
+  color: var(--muted);
+  line-height: 1.6;
+  margin-bottom: 42px;
+}
+
+.card {
+  background: var(--panel);
+  border: 2px solid var(--border);
+  border-radius: 18px;
+  padding: 26px 22px;
+  margin-bottom: 30px;
+}
+
+.card h2 {
+  margin: 0 0 12px;
+  font-size: 25px;
+}
+
+.card p {
+  margin: 0 0 22px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.action {
+  display: block;
+  width: 100%;
+  min-height: 64px;
+  padding: 18px;
+  border: 0;
+  border-radius: 14px;
+  background: var(--accent);
+  color: #111;
+  font-size: 20px;
+  font-weight: 800;
+  text-align: center;
+  text-decoration: none;
+}
+
+.coming {
+  display: block;
+  width: 100%;
+  min-height: 64px;
+  padding: 18px;
+  border: 2px solid var(--border);
+  border-radius: 14px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 20px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.status {
+  font-weight: 800;
+  color: var(--accent);
+  margin-bottom: 12px;
+}
+
+footer {
+  margin-top: 44px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 16px;
+}
 </style>
 </head>
+
 <body>
 
-<header>
-  <span class="eyebrow">Business account</span>
-  <h1>See &amp; Say for Business</h1>
-</header>
-
 <main>
-  <div class="card">
-    <span class="status">Coming soon</span>
-    <h2>Listing descriptions</h2>
-    <p>Point your camera at a property and get a ready-to-post listing description in seconds.</p>
-  </div>
 
-  <div class="card">
-    <span class="status">Coming soon</span>
-    <h2>Email &amp; client replies</h2>
-    <p>Draft responses to common client questions automatically, in your voice.</p>
-  </div>
+<a class="back" href="index.html" aria-label="Back to Know N'Go home page">
+← Back to Home
+</a>
 
-  <div class="card">
-    <span class="status">Available now</span>
-    <h2>Vision engine (shared core)</h2>
-    <p>The same description engine used on the personal side — already live and ready to test.</p>
-  </div>
+<h1>Know N'Go Business</h1>
+
+<p class="intro">
+Your AI business assistant for faster answers, visual help, listings, emails, and client communication.
+</p>
+
+<section class="card" aria-labelledby="vision-title">
+<div class="status">Available Now</div>
+
+<h2 id="vision-title">Business Vision Assistant</h2>
+
+<p>
+Take or upload a photo and ask Know N'Go what you need to know.
+</p>
+
+<a class="action" href="vision-engine.html">
+Open Vision Assistant
+</a>
+</section>
+
+<section class="card" aria-labelledby="listing-title">
+<h2 id="listing-title">Listing Descriptions</h2>
+
+<p>
+Turn property photos and details into clear, professional listing descriptions.
+</p>
+
+<div class="coming" aria-label="Listing descriptions coming soon">
+Coming Soon
+</div>
+</section>
+
+<section class="card" aria-labelledby="email-title">
+<h2 id="email-title">Emails & Client Replies</h2>
+
+<p>
+Create professional emails and responses to common client questions quickly.
+</p>
+
+<div class="coming" aria-label="Emails and client replies coming soon">
+Coming Soon
+</div>
+</section>
+
+<section class="card" aria-labelledby="more-title">
+<h2 id="more-title">More Business Tools</h2>
+
+<p>
+Additional tools for professionals, contractors, realtors, and small businesses are on the way.
+</p>
+
+<div class="coming" aria-label="More business tools coming soon">
+Coming Soon
+</div>
+</section>
+
+<footer>
+Know N'Go
+</footer>
+
 </main>
-
-<a class="back" href="index.html">← Back</a>
 
 </body>
 </html>
