@@ -10,22 +10,12 @@
   box-sizing: border-box;
 }
 
-:root {
-  --bg: #10151f;
-  --panel: #171d28;
-  --text: #f4f6f8;
-  --muted: #c7ccd4;
-  --accent: #f2a65a;
-  --border: #394354;
-}
-
 body {
   margin: 0;
-  padding: 30px 20px 80px;
-  background: var(--bg);
-  color: var(--text);
+  padding: 24px 18px 60px;
+  background: #10151f;
+  color: #f2f3f5;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  font-size: 18px;
 }
 
 main {
@@ -33,34 +23,186 @@ main {
   margin: 0 auto;
 }
 
-.back {
-  display: inline-block;
-  color: var(--text);
-  text-decoration: none;
-  font-size: 20px;
-  font-weight: 700;
-  padding: 14px 0;
-  margin-bottom: 30px;
-}
-
 h1 {
-  font-size: 36px;
-  margin: 0 0 14px;
+  font-size: 34px;
+  margin: 0 0 12px;
 }
 
 .intro {
-  color: var(--muted);
+  font-size: 20px;
+  line-height: 1.5;
+  margin-bottom: 36px;
+}
+
+.action {
+  display: block;
+  width: 100%;
+  min-height: 64px;
+  margin: 0 0 26px;
+  padding: 18px;
+  border: 0;
+  border-radius: 14px;
+  background: #ffffff;
+  color: #10151f;
+  font-size: 20px;
+  font-weight: 700;
+  text-align: center;
+  cursor: pointer;
+}
+
+.action:focus,
+textarea:focus {
+  outline: 4px solid #ffffff;
+  outline-offset: 4px;
+}
+
+input[type="file"] {
+  position: absolute;
+  left: -9999px;
+}
+
+#previewArea {
+  margin: 8px 0 34px;
+}
+
+#preview {
+  display: none;
+  width: 100%;
+  max-height: 380px;
+  object-fit: contain;
+  border-radius: 14px;
+}
+
+#photoStatus {
+  font-size: 18px;
+  line-height: 1.5;
+  margin-top: 14px;
+}
+
+.question-section {
+  margin-top: 36px;
+}
+
+label.question-label {
+  display: block;
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 14px;
+}
+
+textarea {
+  width: 100%;
+  min-height: 140px;
+  padding: 16px;
+  margin-bottom: 26px;
+  border: 2px solid #d7dbe2;
+  border-radius: 14px;
+  background: #ffffff;
+  color: #10151f;
+  font-size: 20px;
+  font-family: inherit;
+  resize: vertical;
+}
+
+#askButton {
+  background: #ffffff;
+  color: #10151f;
+}
+
+#askButton:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+#result {
+  margin-top: 34px;
+  padding: 22px;
+  border-radius: 14px;
+  background: #171d29;
+  font-size: 20px;
   line-height: 1.6;
-  margin-bottom: 42px;
 }
 
-.section {
-  background: var(--panel);
-  border: 2px solid var(--border);
-  border-radius: 18px;
-  padding: 26px 22px;
-  margin-bottom: 34px;
+#result:empty {
+  display: none;
 }
 
-.section h2 {
-  margin: 0 0 
+.status {
+  margin-top: 20px;
+  font-size: 18px;
+  line-height: 1.5;
+}
+</style>
+</head>
+
+<body>
+
+<main>
+  <h1>Know N'Go Personal</h1>
+
+  <p class="intro">
+    Take a photo, upload one, or type a question below.
+  </p>
+
+  <label for="cameraInput" class="action">
+    Take a Photo
+  </label>
+
+  <input
+    id="cameraInput"
+    type="file"
+    accept="image/*"
+    capture="environment"
+    aria-label="Take a photo"
+  >
+
+  <label for="uploadInput" class="action">
+    Upload a Photo
+  </label>
+
+  <input
+    id="uploadInput"
+    type="file"
+    accept="image/*"
+    aria-label="Upload a photo"
+  >
+
+  <div id="previewArea">
+    <img id="preview" alt="Selected photo preview">
+    <div
+      id="photoStatus"
+      role="status"
+      aria-live="polite"
+    ></div>
+  </div>
+
+  <section class="question-section">
+    <label for="question" class="question-label">
+      Ask a Question
+    </label>
+
+    <textarea
+      id="question"
+      placeholder="Type your question here"
+      aria-label="Type your question"
+    ></textarea>
+
+    <button
+      id="askButton"
+      class="action"
+      type="button"
+    >
+      Ask Know N'Go
+    </button>
+  </section>
+
+  <div
+    id="status"
+    class="status"
+    role="status"
+    aria-live="polite"
+  ></div>
+
+  <div
+    id="result"
+    role="region"
