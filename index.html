@@ -1,7 +1,3 @@
-I found the actual problem: server.js is rejecting every question that does not include a photo. That is why changing the Personal page did nothing.
-
-Replace all of server.js with this:
-
 const express = require("express");
 const cors = require("cors");
 const app = express();
