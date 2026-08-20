@@ -26,7 +26,7 @@ main {
 
 h1 {
   font-size: 36px;
-  margin: 0 0 32px;
+  margin: 0 0 36px;
 }
 
 button,
@@ -34,41 +34,31 @@ input {
   font: inherit;
 }
 
-.action {
+.action,
+#questionInput {
   display: block;
   width: 100%;
-  min-height: 64px;
-  margin: 0 0 30px;
-  padding: 16px;
+  min-height: 68px;
+  margin-bottom: 30px;
+  padding: 16px 20px;
   border: 2px solid #111111;
-  border-radius: 14px;
-  background: #ffffff;
-  color: #111111;
-  font-weight: 700;
-  text-align: center;
-}
-
-#photoInput {
-  position: absolute;
-  left: -9999px;
-}
-
-#question {
-  width: 100%;
-  min-height: 64px;
-  margin: 0 0 30px;
-  padding: 18px;
-  border: 2px solid #555555;
-  border-radius: 14px;
+  border-radius: 16px;
   background: #ffffff;
   color: #111111;
   font-size: 22px;
 }
 
-#question:focus,
-.action:focus {
-  outline: 4px solid #005fcc;
-  outline-offset: 3px;
+.action {
+  font-weight: 700;
+  cursor: pointer;
+}
+
+#questionInput {
+  font-weight: 500;
+}
+
+#photoInput {
+  display: none;
 }
 
 #preview {
@@ -76,154 +66,179 @@ input {
   width: 100%;
   max-height: 420px;
   object-fit: contain;
-  margin: 0 0 30px;
+  margin-bottom: 30px;
   border-radius: 14px;
 }
 
-#status {
-  margin: 28px 0;
-  font-weight: 700;
-}
-
-#answer {
-  display: none;
-  margin-top: 30px;
-  padding: 22px;
-  border: 2px solid #222222;
-  border-radius: 14px;
+#response {
+  margin-top: 10px;
   font-size: 22px;
-  line-height: 1.6;
+  line-height: 1.5;
   white-space: pre-wrap;
+}
+
+.status {
+  font-weight: 600;
 }
 </style>
 </head>
 
 <body>
-
 <main>
   <h1>Know N'Go Personal</h1>
 
-  <label class="action" for="photoInput">
+  <button
+    id="photoButton"
+    class="action"
+    type="button"
+    aria-label="Take or choose a photo">
     Take or Choose a Photo
-  </label>
+  </button>
 
   <input
     id="photoInput"
     type="file"
     accept="image/*"
-    capture="environment"
-  >
+    capture="environment">
 
-  <img id="preview" alt="Selected photo">
+  <img id="preview" alt="Selected photo preview">
 
   <input
-    id="question"
+    id="questionInput"
     type="text"
+    placeholder="Can you help me?"
     aria-label="Ask a question"
-    placeholder="Type your question here"
-    autocomplete="off"
-  >
+    enterkeyhint="send"
+    autocomplete="off">
 
-  <button class="action" id="askButton" type="button">
+  <button
+    id="askButton"
+    class="action"
+    type="button">
     Ask Question
   </button>
 
-  <div id="status" role="status" aria-live="polite"></div>
-
   <div
-    id="answer"
-    tabindex="-1"
+    id="response"
+    role="status"
     aria-live="polite"
-  ></div>
+    aria-atomic="true">
+  </div>
 </main>
 
 <script>
-const API_URL = "https://see-and-say-server-1.onrender.com/describe";
+const SERVER_URL = "https://see-and-say-server-1.onrender.com";
 
+const photoButton = document.getElementById("photoButton");
 const photoInput = document.getElementById("photoInput");
-const preview = document.getElementById("preview");
-const question = document.getElementById("question");
+const questionInput = document.getElementById("questionInput");
 const askButton = document.getElementById("askButton");
-const status = document.getElementById("status");
-const answer = document.getElementById("answer");
+const preview = document.getElementById("preview");
+const response = document.getElementById("response");
 
-let selectedImageBase64 = null;
+let currentImage = "";
+let currentMediaType = "";
 
-photoInput.addEventListener("change", function () {
+photoButton.addEventListener("click", () => {
+  photoInput.click();
+});
+
+photoInput.addEventListener("change", () => {
   const file = photoInput.files[0];
 
   if (!file) {
     return;
   }
 
+  currentMediaType = file.type || "image/jpeg";
+
   const reader = new FileReader();
 
-  reader.onload = function () {
-    selectedImageBase64 = reader.result.split(",")[1];
-    preview.src = reader.result;
+  reader.onload = () => {
+    const result = reader.result;
+    currentImage = result.split(",")[1];
+
+    preview.src = result;
     preview.style.display = "block";
-    status.textContent = "Photo ready.";
+    preview.alt = "Selected photo ready for analysis";
   };
 
   reader.readAsDataURL(file);
 });
 
-question.addEventListener("keydown", function (event) {
+async function submitQuestion() {
+  const text = questionInput.value.trim();
+
+  if (!text && !currentImage) {
+    response.textContent = "Please enter a question or choose a photo.";
+    questionInput.focus();
+    return;
+  }
+
+  response.textContent = "Working...";
+  askButton.disabled = true;
+
+  try {
+    let fetchResponse;
+
+    if (currentImage) {
+      fetchResponse = await fetch(`${SERVER_URL}/describe`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          image: currentImage,
+          mediaType: currentMediaType,
+          question: text || "Describe this image clearly."
+        })
+      });
+    } else {
+      fetchResponse = await fetch(`${SERVER_URL}/ask`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          question: text
+        })
+      });
+    }
+
+    const data = await fetchResponse.json();
+
+    if (!fetchResponse.ok) {
+      throw new Error(
+        data.error ||
+        data.message ||
+        "The server could not complete the request."
+      );
+    }
+
+    response.textContent =
+      data.answer ||
+      data.response ||
+      data.result ||
+      data.description ||
+      data.message ||
+      "No response was returned.";
+
+  } catch (error) {
+    response.textContent = "Unable to get a response right now.";
+    console.error(error);
+  } finally {
+    askButton.disabled = false;
+  }
+}
+
+askButton.addEventListener("click", submitQuestion);
+
+questionInput.addEventListener("keydown", (event) => {
   if (event.key === "Enter") {
     event.preventDefault();
     submitQuestion();
   }
 });
-
-askButton.addEventListener("click", submitQuestion);
-
-async function submitQuestion() {
-  const userQuestion = question.value.trim();
-
-  if (!userQuestion && !selectedImageBase64) {
-    status.textContent = "Type a question or choose a photo.";
-    return;
-  }
-
-  askButton.disabled = true;
-  status.textContent = "Getting your answer...";
-  answer.style.display = "none";
-  answer.textContent = "";
-
-  try {
-    const response = await fetch(API_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        image: selectedImageBase64,
-        question: userQuestion || null
-      })
-    });
-
-    if (!response.ok) {
-      throw new Error("Server error");
-    }
-
-    const data = await response.json();
-
-    let result = "";
-
-    if (typeof data === "string") {
-      result = data;
-    } else if (data.answer) {
-      result = data.answer;
-    } else if (data.response) {
-      result = data.response;
-    } else if (data.text) {
-      result = data.text;
-    } else {
-      const parts = [];
-
-      if (data.whatICanSee) {
-        parts.push(data.whatICanSee);
-      }
-
-      if (data.seeing) {
-        parts.push(data
+</script>
+</body>
+</html>
