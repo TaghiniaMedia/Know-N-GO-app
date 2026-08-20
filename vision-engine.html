@@ -1,213 +1,327 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Know N'Go Personal</title>
+
 <style>
-*{box-sizing:border-box}
-body{
-  margin:0;
-  padding:24px 18px 60px;
-  background:#10151f;
-  color:#f2f3f5;
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+* {
+  box-sizing: border-box;
 }
-main{
-  max-width:760px;
-  margin:auto;
+
+body {
+  margin: 0;
+  padding: 24px 18px 60px;
+  background: #10151f;
+  color: #f2f3f5;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
-h1{margin:0 0 8px}
-p{line-height:1.5}
-.section{
-  margin-top:34px;
+
+main {
+  max-width: 760px;
+  margin: 0 auto;
 }
-button,
-input,
-textarea{
-  width:100%;
-  font-size:18px;
-  border-radius:12px;
+
+h1 {
+  margin: 0 0 12px;
+  font-size: 34px;
 }
-button{
-  min-height:58px;
-  border:0;
-  padding:14px;
-  background:#6fa287;
-  color:white;
-  font-weight:700;
-  margin-top:18px;
+
+.intro {
+  margin: 0 0 32px;
+  line-height: 1.6;
+  font-size: 19px;
+  color: #d6dbe3;
 }
-input,
-textarea{
-  background:#171d29;
-  color:white;
-  border:1px solid #3a4352;
-  padding:14px;
-  margin-top:12px;
+
+.section {
+  margin-bottom: 40px;
 }
-textarea{
-  min-height:120px;
-  resize:vertical;
+
+h2 {
+  margin-bottom: 16px;
+  font-size: 24px;
 }
-#preview{
-  display:none;
-  width:100%;
-  max-height:350px;
-  object-fit:contain;
-  margin-top:18px;
-  border-radius:12px;
+
+.action {
+  display: block;
+  width: 100%;
+  min-height: 64px;
+  margin: 0 0 22px;
+  padding: 16px 18px;
+  border: 2px solid #566375;
+  border-radius: 14px;
+  background: #1a2230;
+  color: white;
+  font-size: 20px;
+  font-weight: 700;
+  text-align: center;
 }
-#status,
-#answer{
-  margin-top:20px;
-  line-height:1.5;
+
+.action:focus,
+textarea:focus {
+  outline: 4px solid #ffffff;
+  outline-offset: 3px;
 }
-#answer{
-  padding:16px;
-  background:#171d29;
-  border-radius:12px;
+
+input[type="file"] {
+  position: absolute;
+  left: -9999px;
 }
-.hidden{
-  position:absolute;
-  left:-9999px;
+
+#previewArea {
+  display: none;
+  margin-top: 22px;
+  padding: 18px;
+  border-radius: 14px;
+  background: #171d27;
+}
+
+#previewImage {
+  display: block;
+  width: 100%;
+  max-height: 420px;
+  object-fit: contain;
+  border-radius: 12px;
+  margin-bottom: 16px;
+}
+
+#photoStatus {
+  font-size: 18px;
+  line-height: 1.5;
+}
+
+textarea {
+  width: 100%;
+  min-height: 140px;
+  padding: 16px;
+  border: 2px solid #566375;
+  border-radius: 14px;
+  background: #171d27;
+  color: white;
+  font-size: 19px;
+  line-height: 1.5;
+  resize: vertical;
+}
+
+#answerArea {
+  display: none;
+  margin-top: 24px;
+  padding: 20px;
+  border-radius: 14px;
+  background: #171d27;
+  font-size: 19px;
+  line-height: 1.6;
+}
+
+.small {
+  font-size: 16px;
+  color: #bac2cd;
+}
+
+button {
+  cursor: pointer;
 }
 </style>
 </head>
+
 <body>
 
 <main>
-<h1>Know N'Go Personal</h1>
-<p>Take or choose a photo, then ask what you want to know.</p>
 
-<div class="section">
-<button id="cameraButton" type="button">Take a Photo</button>
+<h1>Personal</h1>
 
-<button id="libraryButton" type="button">Choose a Photo</button>
+<p class="intro">
+Take or choose a photo, ask a question, and Know N'Go will help you understand what you are looking at.
+</p>
+
+<section class="section" aria-labelledby="photoHeading">
+
+<h2 id="photoHeading">Add a photo</h2>
+
+<button
+  class="action"
+  id="takePhotoButton"
+  type="button"
+  aria-describedby="photoHelp">
+Take a Photo
+</button>
+
+<button
+  class="action"
+  id="choosePhotoButton"
+  type="button"
+  aria-describedby="photoHelp">
+Choose a Photo
+</button>
+
+<p id="photoHelp" class="small">
+You can take a new picture or select one already saved on your device.
+</p>
 
 <input
   id="cameraInput"
-  class="hidden"
   type="file"
   accept="image/*"
   capture="environment"
   aria-label="Take a photo">
 
 <input
-  id="libraryInput"
-  class="hidden"
+  id="galleryInput"
   type="file"
   accept="image/*"
-  aria-label="Choose a photo from library">
+  aria-label="Choose a photo">
 
-<img id="preview" alt="Selected image preview">
+<div
+  id="previewArea"
+  tabindex="-1"
+  aria-live="polite">
+
+<img
+  id="previewImage"
+  alt="Selected photo preview">
+
+<div id="photoStatus">
+Photo ready.
 </div>
 
-<div class="section">
-<label for="question">What would you like to know?</label>
+</div>
+
+</section>
+
+<section class="section" aria-labelledby="questionHeading">
+
+<h2 id="questionHeading">Ask about the photo</h2>
+
+<label for="questionInput" class="small">
+Type your question below.
+</label>
+
 <textarea
-  id="question"
-  placeholder="Example: What is in this picture?"></textarea>
+  id="questionInput"
+  placeholder="Example: What is in this photo?"
+  aria-label="Question about your photo"></textarea>
 
-<button id="askButton" type="button">Ask Know N'Go</button>
+<button
+  class="action"
+  id="askButton"
+  type="button"
+  style="margin-top:22px;">
+Ask Know N'Go
+</button>
+
+<div
+  id="answerArea"
+  tabindex="-1"
+  role="status"
+  aria-live="polite">
 </div>
 
-<p id="status" role="status" aria-live="polite"></p>
-
-<div id="answer" role="region" aria-live="polite" aria-label="Know N'Go answer">
-Your answer will appear here.
-</div>
+</section>
 
 </main>
 
 <script>
-const cameraButton = document.getElementById("cameraButton");
-const libraryButton = document.getElementById("libraryButton");
+const takePhotoButton = document.getElementById("takePhotoButton");
+const choosePhotoButton = document.getElementById("choosePhotoButton");
 const cameraInput = document.getElementById("cameraInput");
-const libraryInput = document.getElementById("libraryInput");
-const preview = document.getElementById("preview");
-const question = document.getElementById("question");
+const galleryInput = document.getElementById("galleryInput");
+const previewArea = document.getElementById("previewArea");
+const previewImage = document.getElementById("previewImage");
+const photoStatus = document.getElementById("photoStatus");
+const questionInput = document.getElementById("questionInput");
 const askButton = document.getElementById("askButton");
-const status = document.getElementById("status");
-const answer = document.getElementById("answer");
+const answerArea = document.getElementById("answerArea");
 
 let selectedFile = null;
 
-cameraButton.addEventListener("click", () => cameraInput.click());
-libraryButton.addEventListener("click", () => libraryInput.click());
+takePhotoButton.addEventListener("click", function () {
+  cameraInput.click();
+});
 
-cameraInput.addEventListener("change", handleFile);
-libraryInput.addEventListener("change", handleFile);
+choosePhotoButton.addEventListener("click", function () {
+  galleryInput.click();
+});
 
-function handleFile(event){
-  const file = event.target.files[0];
-  if(!file) return;
+cameraInput.addEventListener("change", function () {
+  handlePhoto(cameraInput.files);
+});
 
-  selectedFile = file;
-  preview.src = URL.createObjectURL(file);
-  preview.style.display = "block";
-  status.textContent = "Photo selected.";
-}
+galleryInput.addEventListener("change", function () {
+  handlePhoto(galleryInput.files);
+});
 
-askButton.addEventListener("click", async () => {
-  const userQuestion = question.value.trim();
-
-  if(!selectedFile && !userQuestion){
-    status.textContent = "Add a photo or type a question first.";
+function handlePhoto(files) {
+  if (!files || files.length === 0) {
     return;
   }
 
-  askButton.disabled = true;
-  status.textContent = "Working...";
-  answer.textContent = "";
+  selectedFile = files[0];
 
-  try{
-    const formData = new FormData();
-
-    if(selectedFile){
-      formData.append("image", selectedFile);
-    }
-
-    formData.append(
-      "question",
-      userQuestion || "Describe this image clearly and helpfully."
-    );
-
-    const response = await fetch(
-      "https://know-n-go.onrender.com/analyze",
-      {
-        method:"POST",
-        body:formData
-      }
-    );
-
-    if(!response.ok){
-      throw new Error("Server error " + response.status);
-    }
-
-    const data = await response.json();
-
-    const result =
-      data.answer ||
-      data.response ||
-      data.result ||
-      data.message ||
-      "I received the request, but no answer was returned.";
-
-    answer.textContent = result;
-    status.textContent = "Done.";
-
-  }catch(error){
-    answer.textContent =
-      "Know N'Go could not connect to the server. The server connection still needs to be activated.";
-    status.textContent = "Connection failed.";
-    console.error(error);
-
-  }finally{
-    askButton.disabled = false;
+  if (!selectedFile.type.startsWith("image/")) {
+    selectedFile = null;
+    previewArea.style.display = "block";
+    previewImage.style.display = "none";
+    photoStatus.textContent = "That file is not a supported image.";
+    previewArea.focus();
+    return;
   }
+
+  const reader = new FileReader();
+
+  reader.onload = function (event) {
+    previewImage.src = event.target.result;
+    previewImage.style.display = "block";
+    previewArea.style.display = "block";
+    photoStatus.textContent = "Photo selected and ready.";
+    previewArea.focus();
+  };
+
+  reader.onerror = function () {
+    selectedFile = null;
+    previewArea.style.display = "block";
+    previewImage.style.display = "none";
+    photoStatus.textContent = "The photo could not be loaded. Please try again.";
+    previewArea.focus();
+  };
+
+  reader.readAsDataURL(selectedFile);
+}
+
+askButton.addEventListener("click", function () {
+
+  const question = questionInput.value.trim();
+
+  if (!selectedFile && !question) {
+    showAnswer("Please add a photo or type a question first.");
+    return;
+  }
+
+  if (!selectedFile) {
+    showAnswer("Your question is ready, but please add a photo so Know N'Go can analyze it.");
+    return;
+  }
+
+  if (!question) {
+    showAnswer("Your photo is ready. Type what you would like to know about it.");
+    questionInput.focus();
+    return;
+  }
+
+  showAnswer(
+    "Your photo and question are ready. The Personal page is working correctly. AI photo analysis will connect here next."
+  );
 });
+
+function showAnswer(message) {
+  answerArea.textContent = message;
+  answerArea.style.display = "block";
+  answerArea.focus();
+}
 </script>
 
 </body>
 </html>
+```
