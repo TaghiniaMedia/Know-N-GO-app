@@ -12,76 +12,100 @@
 
 body {
   margin: 0;
-  padding: 24px 18px 60px;
+  padding: 28px 18px 80px;
   background: #10151f;
   color: #f2f3f5;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
 main {
+  width: 100%;
   max-width: 760px;
-  margin: auto;
+  margin: 0 auto;
 }
 
 h1 {
-  margin-bottom: 8px;
+  margin: 0 0 10px;
+  font-size: 32px;
+  line-height: 1.2;
 }
 
-p {
+.subtitle {
+  margin: 0 0 42px;
+  color: #aeb7c5;
+  font-size: 18px;
   line-height: 1.5;
 }
 
-button,
-input,
-label {
-  font-size: 18px;
+.section {
+  margin-bottom: 34px;
 }
 
-.action {
-  display: block;
+button,
+input {
   width: 100%;
-  min-height: 60px;
-  margin: 24px 0;
-  padding: 16px;
-  border: 0;
+  min-height: 62px;
   border-radius: 14px;
+  font-size: 18px;
+  font-family: inherit;
+}
+
+button {
+  border: none;
+  padding: 16px 18px;
   font-weight: 700;
   cursor: pointer;
 }
 
-#photoButton {
-  background: #6fa287;
-  color: #08110d;
+.primary {
+  background: #78ac90;
+  color: #07130d;
 }
 
-#describeButton {
-  background: #4d8fff;
-  color: white;
+.secondary {
+  background: #263245;
+  color: #ffffff;
+  border: 2px solid #75839a;
 }
 
-#describeButton:disabled {
+button:disabled {
   opacity: 0.45;
+  cursor: not-allowed;
+}
+
+input {
+  padding: 14px 16px;
+  border: 2px solid #75839a;
+  background: #151d29;
+  color: #ffffff;
+}
+
+input::placeholder {
+  color: #adb5c2;
 }
 
 label {
   display: block;
+  margin-bottom: 12px;
+  font-size: 19px;
   font-weight: 700;
-  margin-top: 30px;
-  margin-bottom: 10px;
 }
 
-#question {
-  width: 100%;
-  min-height: 58px;
-  padding: 14px;
-  border-radius: 12px;
-  border: 2px solid #5f6877;
-  background: #171d29;
-  color: #f2f3f5;
+#photoInput,
+#cameraInput {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
 }
 
-#fileInput {
-  display: none;
+#status {
+  min-height: 28px;
+  margin: 22px 0 30px;
+  color: #d4dae3;
+  font-size: 17px;
+  line-height: 1.5;
 }
 
 #preview {
@@ -93,304 +117,491 @@ label {
   border-radius: 14px;
 }
 
-#status {
-  margin-top: 26px;
-  font-size: 18px;
-  line-height: 1.5;
+#results {
+  display: none;
+  margin-top: 38px;
+  padding: 24px 20px;
+  background: #171f2c;
+  border-radius: 16px;
+  line-height: 1.6;
 }
 
-.result {
-  margin-top: 24px;
-  padding: 18px;
-  background: #171d29;
-  border-radius: 14px;
+.result-block {
+  margin-bottom: 28px;
 }
 
-.result h2 {
-  margin-top: 0;
+.result-block:last-child {
+  margin-bottom: 0;
+}
+
+.result-block h2 {
+  margin: 0 0 10px;
   font-size: 21px;
+}
+
+.result-block p {
+  margin: 0;
+  font-size: 18px;
+  white-space: pre-wrap;
+}
+
+.spacer {
+  height: 16px;
 }
 </style>
 </head>
 
 <body>
+
 <main>
+  <h1>Know N'Go Personal</h1>
 
-<h1>Know N'Go Personal</h1>
+  <p class="subtitle">
+    Snap or choose a photo, ask a question, and get a clear answer.
+  </p>
 
-<p>Take or choose a photo and Know N'Go will describe what is in front of you.</p>
+  <div class="section">
+    <button
+      id="choosePhotoBtn"
+      class="primary"
+      type="button"
+      aria-label="Choose an existing photo"
+    >
+      Choose Photo
+    </button>
 
-<button class="action" id="photoButton" type="button">
-Take or Choose Photo
-</button>
+    <input
+      id="photoInput"
+      type="file"
+      accept="image/*"
+      aria-hidden="true"
+      tabindex="-1"
+    >
 
-<input
-  id="fileInput"
-  type="file"
-  accept="image/*"
-  capture="environment"
->
+    <div class="spacer"></div>
 
-<img id="preview" alt="Selected photo preview">
+    <button
+      id="takePhotoBtn"
+      class="secondary"
+      type="button"
+      aria-label="Take a new photo with the camera"
+    >
+      Take Photo
+    </button>
 
-<label for="question">
-Ask a question about the photo
-</label>
+    <input
+      id="cameraInput"
+      type="file"
+      accept="image/*"
+      capture="environment"
+      aria-hidden="true"
+      tabindex="-1"
+    >
 
-<input
-  id="question"
-  type="text"
-  placeholder="Example: What is this?"
->
+    <img id="preview" alt="Selected photo preview">
+  </div>
 
-<button
-  class="action"
-  id="describeButton"
-  type="button"
-  disabled
->
-Describe This
-</button>
+  <div class="section">
+    <label for="question">
+      What would you like to know?
+    </label>
 
-<div
-  id="status"
-  role="status"
-  aria-live="polite"
-></div>
+    <input
+      id="question"
+      type="text"
+      autocomplete="off"
+      placeholder="Example: What is this?"
+      aria-describedby="questionHelp"
+    >
 
-<div
-  id="results"
-  aria-live="polite"
-></div>
+    <p id="questionHelp" style="position:absolute;left:-10000px;">
+      Asking a question is optional. If left blank, Know N'Go will describe the photo.
+    </p>
+  </div>
 
+  <div
+    id="status"
+    role="status"
+    aria-live="polite"
+    aria-atomic="true"
+  >
+    Choose or take a photo to begin.
+  </div>
+
+  <div class="section">
+    <button
+      id="describeBtn"
+      class="primary"
+      type="button"
+      disabled
+      aria-disabled="true"
+    >
+      Describe This
+    </button>
+  </div>
+
+  <div
+    id="results"
+    aria-live="polite"
+    aria-atomic="true"
+    tabindex="-1"
+  >
+    <div
+      id="descriptionBlock"
+      class="result-block"
+      hidden
+    >
+      <h2>What I can see</h2>
+      <p id="description"></p>
+    </div>
+
+    <div
+      id="answerBlock"
+      class="result-block"
+      hidden
+    >
+      <h2>Answer</h2>
+      <p id="answer"></p>
+    </div>
+
+    <div
+      id="warningBlock"
+      class="result-block"
+      hidden
+    >
+      <h2>Heads up</h2>
+      <p id="warning"></p>
+    </div>
+
+    <div
+      id="closerBlock"
+      class="result-block"
+      hidden
+    >
+      <h2>Needs a closer photo</h2>
+      <p id="closer"></p>
+    </div>
+
+    <div
+      id="suggestionBlock"
+      class="result-block"
+      hidden
+    >
+      <h2>Suggestion</h2>
+      <p id="suggestion"></p>
+    </div>
+  </div>
 </main>
 
 <script>
-const BACKEND_URL =
-  "https://see-and-say-server-1.onrender.com/describe";
+const API_URL = "https://see-and-say-server.onrender.com/describe";
 
-const photoButton =
-  document.getElementById("photoButton");
+const choosePhotoBtn = document.getElementById("choosePhotoBtn");
+const takePhotoBtn = document.getElementById("takePhotoBtn");
+const photoInput = document.getElementById("photoInput");
+const cameraInput = document.getElementById("cameraInput");
+const questionInput = document.getElementById("question");
+const describeBtn = document.getElementById("describeBtn");
+const status = document.getElementById("status");
+const preview = document.getElementById("preview");
+const results = document.getElementById("results");
 
-const fileInput =
-  document.getElementById("fileInput");
+let selectedImageBase64 = "";
+let selectedMediaType = "";
 
-const preview =
-  document.getElementById("preview");
-
-const question =
-  document.getElementById("question");
-
-const describeButton =
-  document.getElementById("describeButton");
-
-const status =
-  document.getElementById("status");
-
-const results =
-  document.getElementById("results");
-
-let selectedImageBase64 = null;
-
-photoButton.addEventListener("click", function () {
-  fileInput.click();
+choosePhotoBtn.addEventListener("click", () => {
+  photoInput.value = "";
+  photoInput.click();
 });
 
-fileInput.addEventListener("change", function () {
-  const file = fileInput.files[0];
+takePhotoBtn.addEventListener("click", () => {
+  cameraInput.value = "";
+  cameraInput.click();
+});
+
+photoInput.addEventListener("change", handlePhotoSelection);
+cameraInput.addEventListener("change", handlePhotoSelection);
+
+async function handlePhotoSelection(event) {
+  const file = event.target.files && event.target.files[0];
 
   if (!file) {
+    status.textContent = "No photo was selected.";
     return;
   }
 
-  const reader = new FileReader();
+  if (!file.type.startsWith("image/")) {
+    status.textContent = "Please choose an image file.";
+    return;
+  }
 
-  reader.onload = function () {
-    selectedImageBase64 =
-      reader.result.split(",")[1];
+  status.textContent = "Preparing your photo.";
 
-    preview.src = reader.result;
+  try {
+    selectedMediaType = file.type || "image/jpeg";
+
+    const dataURL = await fileToDataURL(file);
+
+    selectedImageBase64 = dataURL.split(",")[1];
+
+    preview.src = dataURL;
     preview.style.display = "block";
 
-    describeButton.disabled = false;
+    describeBtn.disabled = false;
+    describeBtn.setAttribute("aria-disabled", "false");
+
+    clearResults();
 
     status.textContent =
-      "Photo ready. Double-tap Describe This.";
-  };
+      "Photo ready. Ask a question if you want, then double-tap Describe This.";
 
-  reader.readAsDataURL(file);
+  } catch (error) {
+    selectedImageBase64 = "";
+    selectedMediaType = "";
+
+    describeBtn.disabled = true;
+    describeBtn.setAttribute("aria-disabled", "true");
+
+    status.textContent =
+      "I could not prepare that photo. Please choose another one.";
+  }
+}
+
+function fileToDataURL(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = () => reject(reader.error);
+
+    reader.readAsDataURL(file);
+  });
+}
+
+describeBtn.addEventListener("click", describePhoto);
+
+questionInput.addEventListener("keydown", event => {
+  if (
+    event.key === "Enter" &&
+    selectedImageBase64 &&
+    !describeBtn.disabled
+  ) {
+    event.preventDefault();
+    describePhoto();
+  }
 });
 
-describeButton.addEventListener(
-  "click",
-  async function () {
+async function describePhoto() {
+  if (!selectedImageBase64) {
+    status.textContent = "Please choose or take a photo first.";
+    return;
+  }
 
-    if (!selectedImageBase64) {
-      return;
-    }
+  describeBtn.disabled = true;
+  describeBtn.setAttribute("aria-disabled", "true");
 
-    describeButton.disabled = true;
+  choosePhotoBtn.disabled = true;
+  takePhotoBtn.disabled = true;
 
-    results.innerHTML = "";
+  clearResults();
 
-    status.textContent =
-      "Analyzing photo.";
+  status.textContent = "Looking at your photo. Please wait.";
+
+  try {
+    const response = await fetch(API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        image: selectedImageBase64,
+        mediaType: selectedMediaType,
+        question: questionInput.value.trim() || null
+      })
+    });
+
+    let data;
 
     try {
-
-      const response =
-        await fetch(BACKEND_URL, {
-          method: "POST",
-
-          headers: {
-            "Content-Type": "application/json"
-          },
-
-          body: JSON.stringify({
-            image: selectedImageBase64,
-            question:
-              question.value.trim() || null
-          })
-        });
-
-      if (!response.ok) {
-        throw new Error(
-          "Server returned " +
-          response.status
-        );
-      }
-
-      const data =
-        await response.json();
-
-      showResults(data);
-
-    } catch (error) {
-
-      status.textContent =
-        "Something went wrong. Please try again.";
-
-      speak(
-        "Something went wrong. Please try again."
-      );
-
-    } finally {
-
-      describeButton.disabled = false;
+      data = await response.json();
+    } catch {
+      throw new Error("The server returned an unreadable response.");
     }
+
+    if (!response.ok) {
+      throw new Error(
+        data.error ||
+        data.message ||
+        "Know N'Go could not analyze the photo."
+      );
+    }
+
+    showResults(data);
+
+    status.textContent = "Done.";
+
+  } catch (error) {
+    results.style.display = "none";
+
+    status.textContent =
+      error.message ||
+      "Know N'Go could not analyze the photo. Please try again.";
+
+  } finally {
+    describeBtn.disabled = false;
+    describeBtn.setAttribute("aria-disabled", "false");
+
+    choosePhotoBtn.disabled = false;
+    takePhotoBtn.disabled = false;
   }
-);
+}
 
 function showResults(data) {
+  clearResults();
 
-  status.textContent = "";
-
-  const seeing =
+  const description =
+    data.description ||
     data.whatICanSee ||
     data.seeing ||
+    data.result ||
     "";
 
-  const closer =
-    data.needsCloserPhoto ||
-    data.closer ||
+  const answer =
+    data.answer ||
     "";
+
+  const warning =
+    data.warning ||
+    data.headsUp ||
+    "";
+
+  let closer = "";
+
+  if (typeof data.needsCloserPhoto === "string") {
+    closer = data.needsCloserPhoto;
+  } else if (data.needsCloserPhoto === true) {
+    closer = "A closer photo may help me give you a more accurate answer.";
+  } else if (typeof data.closerPhoto === "string") {
+    closer = data.closerPhoto;
+  } else if (typeof data.closer === "string") {
+    closer = data.closer;
+  }
 
   const suggestion =
     data.suggestion ||
     "";
 
-  let html = "";
-
-  const spoken = [];
-
-  if (seeing) {
-
-    html += makeResult(
-      "What I can see",
-      seeing
-    );
-
-    spoken.push(seeing);
-  }
-
-  if (closer) {
-
-    html += makeResult(
-      "Needs a closer photo",
-      closer
-    );
-
-    spoken.push(
-      "I need a closer photo to check " +
-      closer
-    );
-  }
-
-  if (suggestion) {
-
-    html += makeResult(
-      "Suggestion",
-      suggestion
-    );
-
-    spoken.push(suggestion);
-  }
-
-  if (!html) {
-
-    html = makeResult(
-      "Result",
-      "No description was returned."
-    );
-
-    spoken.push(
-      "No description was returned."
-    );
-  }
-
-  results.innerHTML = html;
-
-  speak(
-    spoken.join(". ")
+  setResult(
+    "descriptionBlock",
+    "description",
+    description
   );
+
+  setResult(
+    "answerBlock",
+    "answer",
+    answer
+  );
+
+  setResult(
+    "warningBlock",
+    "warning",
+    warning
+  );
+
+  setResult(
+    "closerBlock",
+    "closer",
+    closer
+  );
+
+  setResult(
+    "suggestionBlock",
+    "suggestion",
+    suggestion
+  );
+
+  if (
+    !description &&
+    !answer &&
+    !warning &&
+    !closer &&
+    !suggestion
+  ) {
+    setResult(
+      "descriptionBlock",
+      "description",
+      "I received a response, but there was no description to display."
+    );
+  }
+
+  results.style.display = "block";
+  results.focus();
+
+  const spokenText = [
+    description,
+    answer,
+    warning,
+    closer,
+    suggestion
+  ]
+    .filter(Boolean)
+    .join(". ");
+
+  speak(spokenText);
 }
 
-function makeResult(title, text) {
+function setResult(blockId, textId, value) {
+  const block = document.getElementById(blockId);
+  const text = document.getElementById(textId);
 
-  return (
-    '<section class="result">' +
-    "<h2>" +
-    escapeHtml(title) +
-    "</h2>" +
-    "<p>" +
-    escapeHtml(text) +
-    "</p>" +
-    "</section>"
-  );
+  if (value) {
+    text.textContent = value;
+    block.hidden = false;
+  } else {
+    text.textContent = "";
+    block.hidden = true;
+  }
 }
 
-function escapeHtml(text) {
+function clearResults() {
+  results.style.display = "none";
 
-  const element =
-    document.createElement("div");
+  [
+    "descriptionBlock",
+    "answerBlock",
+    "warningBlock",
+    "closerBlock",
+    "suggestionBlock"
+  ].forEach(id => {
+    document.getElementById(id).hidden = true;
+  });
 
-  element.textContent = text;
-
-  return element.innerHTML;
+  [
+    "description",
+    "answer",
+    "warning",
+    "closer",
+    "suggestion"
+  ].forEach(id => {
+    document.getElementById(id).textContent = "";
+  });
 }
 
 function speak(text) {
-
-  if (!text) {
+  if (!text || !("speechSynthesis" in window)) {
     return;
   }
 
-  window.speechSynthesis.cancel();
+  try {
+    window.speechSynthesis.cancel();
 
-  const voice =
-    new SpeechSynthesisUtterance(text);
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.rate = 0.95;
 
-  window.speechSynthesis.speak(voice);
+    window.speechSynthesis.speak(utterance);
+  } catch (error) {
+  }
 }
 </script>
 
