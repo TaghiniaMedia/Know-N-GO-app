@@ -38,13 +38,13 @@ h1 {
 }
 
 .section {
-  margin-bottom: 34px;
+  margin-bottom: 38px;
 }
 
 button,
 input {
   width: 100%;
-  min-height: 62px;
+  min-height: 64px;
   border-radius: 14px;
   font-size: 18px;
   font-family: inherit;
@@ -52,9 +52,8 @@ input {
 
 button {
   border: none;
-  padding: 16px 18px;
+  padding: 17px 18px;
   font-weight: 700;
-  cursor: pointer;
 }
 
 .primary {
@@ -62,18 +61,11 @@ button {
   color: #07130d;
 }
 
-.secondary {
-  background: #263245;
-  color: #ffffff;
-  border: 2px solid #75839a;
-}
-
 button:disabled {
   opacity: 0.45;
-  cursor: not-allowed;
 }
 
-input {
+input[type="text"] {
   padding: 14px 16px;
   border: 2px solid #75839a;
   background: #151d29;
@@ -86,26 +78,18 @@ input::placeholder {
 
 label {
   display: block;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
   font-size: 19px;
   font-weight: 700;
 }
 
-#photoInput,
-#cameraInput {
+#photoInput {
   position: absolute;
   left: -10000px;
+  top: auto;
   width: 1px;
   height: 1px;
   overflow: hidden;
-}
-
-#status {
-  min-height: 28px;
-  margin: 22px 0 30px;
-  color: #d4dae3;
-  font-size: 17px;
-  line-height: 1.5;
 }
 
 #preview {
@@ -113,8 +97,16 @@ label {
   width: 100%;
   max-height: 420px;
   object-fit: contain;
-  margin-top: 24px;
+  margin-top: 28px;
   border-radius: 14px;
+}
+
+#status {
+  min-height: 32px;
+  margin: 8px 0 38px;
+  color: #d4dae3;
+  font-size: 18px;
+  line-height: 1.5;
 }
 
 #results {
@@ -127,7 +119,7 @@ label {
 }
 
 .result-block {
-  margin-bottom: 28px;
+  margin-bottom: 30px;
 }
 
 .result-block:last-child {
@@ -144,466 +136,264 @@ label {
   font-size: 18px;
   white-space: pre-wrap;
 }
-
-.spacer {
-  height: 16px;
-}
 </style>
 </head>
 
 <body>
 
 <main>
-  <h1>Know N'Go Personal</h1>
 
-  <p class="subtitle">
-    Snap or choose a photo, ask a question, and get a clear answer.
-  </p>
+<h1>Know N'Go Personal</h1>
 
-  <div class="section">
-    <button
-      id="choosePhotoBtn"
-      class="primary"
-      type="button"
-      aria-label="Choose an existing photo"
-    >
-      Choose Photo
-    </button>
+<p class="subtitle">
+Snap or choose a photo, ask a question, and get a clear answer.
+</p>
 
-    <input
-      id="photoInput"
-      type="file"
-      accept="image/*"
-      aria-hidden="true"
-      tabindex="-1"
-    >
+<div class="section">
 
-    <div class="spacer"></div>
+<button
+  id="photoButton"
+  class="primary"
+  type="button"
+  aria-label="Take or choose a photo">
+  Take or Choose Photo
+</button>
 
-    <button
-      id="takePhotoBtn"
-      class="secondary"
-      type="button"
-      aria-label="Take a new photo with the camera"
-    >
-      Take Photo
-    </button>
+<input
+  id="photoInput"
+  type="file"
+  accept="image/*">
 
-    <input
-      id="cameraInput"
-      type="file"
-      accept="image/*"
-      capture="environment"
-      aria-hidden="true"
-      tabindex="-1"
-    >
+<img
+  id="preview"
+  alt="Selected photo">
 
-    <img id="preview" alt="Selected photo preview">
-  </div>
+</div>
 
-  <div class="section">
-    <label for="question">
-      What would you like to know?
-    </label>
+<div class="section">
 
-    <input
-      id="question"
-      type="text"
-      autocomplete="off"
-      placeholder="Example: What is this?"
-      aria-describedby="questionHelp"
-    >
+<label for="question">
+What would you like to know?
+</label>
 
-    <p id="questionHelp" style="position:absolute;left:-10000px;">
-      Asking a question is optional. If left blank, Know N'Go will describe the photo.
-    </p>
-  </div>
+<input
+  id="question"
+  type="text"
+  autocomplete="off"
+  placeholder="Example: What is this?">
 
-  <div
-    id="status"
-    role="status"
-    aria-live="polite"
-    aria-atomic="true"
-  >
-    Choose or take a photo to begin.
-  </div>
+</div>
 
-  <div class="section">
-    <button
-      id="describeBtn"
-      class="primary"
-      type="button"
-      disabled
-      aria-disabled="true"
-    >
-      Describe This
-    </button>
-  </div>
+<div
+  id="status"
+  role="status"
+  aria-live="polite"
+  aria-atomic="true">
+Choose or take a photo to begin.
+</div>
 
-  <div
-    id="results"
-    aria-live="polite"
-    aria-atomic="true"
-    tabindex="-1"
-  >
-    <div
-      id="descriptionBlock"
-      class="result-block"
-      hidden
-    >
-      <h2>What I can see</h2>
-      <p id="description"></p>
-    </div>
+<div class="section">
 
-    <div
-      id="answerBlock"
-      class="result-block"
-      hidden
-    >
-      <h2>Answer</h2>
-      <p id="answer"></p>
-    </div>
+<button
+  id="describeButton"
+  class="primary"
+  type="button"
+  disabled
+  aria-disabled="true">
+Describe This
+</button>
 
-    <div
-      id="warningBlock"
-      class="result-block"
-      hidden
-    >
-      <h2>Heads up</h2>
-      <p id="warning"></p>
-    </div>
+</div>
 
-    <div
-      id="closerBlock"
-      class="result-block"
-      hidden
-    >
-      <h2>Needs a closer photo</h2>
-      <p id="closer"></p>
-    </div>
+<div
+  id="results"
+  role="region"
+  aria-label="Know N'Go results"
+  aria-live="polite"
+  tabindex="-1">
 
-    <div
-      id="suggestionBlock"
-      class="result-block"
-      hidden
-    >
-      <h2>Suggestion</h2>
-      <p id="suggestion"></p>
-    </div>
-  </div>
+<div
+  id="descriptionBlock"
+  class="result-block"
+  hidden>
+<h2>What I can see</h2>
+<p id="description"></p>
+</div>
+
+<div
+  id="answerBlock"
+  class="result-block"
+  hidden>
+<h2>Answer</h2>
+<p id="answer"></p>
+</div>
+
+<div
+  id="warningBlock"
+  class="result-block"
+  hidden>
+<h2>Heads up</h2>
+<p id="warning"></p>
+</div>
+
+<div
+  id="closerBlock"
+  class="result-block"
+  hidden>
+<h2>Needs a closer photo</h2>
+<p id="closer"></p>
+</div>
+
+<div
+  id="suggestionBlock"
+  class="result-block"
+  hidden>
+<h2>Suggestion</h2>
+<p id="suggestion"></p>
+</div>
+
+</div>
+
 </main>
 
 <script>
-const API_URL = "https://see-and-say-server.onrender.com/describe";
 
-const choosePhotoBtn = document.getElementById("choosePhotoBtn");
-const takePhotoBtn = document.getElementById("takePhotoBtn");
-const photoInput = document.getElementById("photoInput");
-const cameraInput = document.getElementById("cameraInput");
-const questionInput = document.getElementById("question");
-const describeBtn = document.getElementById("describeBtn");
-const status = document.getElementById("status");
-const preview = document.getElementById("preview");
-const results = document.getElementById("results");
+const API_URL =
+"https://see-and-say-server.onrender.com/describe";
 
-let selectedImageBase64 = "";
-let selectedMediaType = "";
+const photoButton =
+document.getElementById("photoButton");
 
-choosePhotoBtn.addEventListener("click", () => {
+const photoInput =
+document.getElementById("photoInput");
+
+const question =
+document.getElementById("question");
+
+const describeButton =
+document.getElementById("describeButton");
+
+const status =
+document.getElementById("status");
+
+const preview =
+document.getElementById("preview");
+
+const results =
+document.getElementById("results");
+
+let selectedImage = "";
+let selectedMediaType = "image/jpeg";
+
+photoButton.addEventListener("click", function () {
+
   photoInput.value = "";
+
   photoInput.click();
+
 });
 
-takePhotoBtn.addEventListener("click", () => {
-  cameraInput.value = "";
-  cameraInput.click();
-});
+photoInput.addEventListener(
+"change",
+async function () {
 
-photoInput.addEventListener("change", handlePhotoSelection);
-cameraInput.addEventListener("change", handlePhotoSelection);
-
-async function handlePhotoSelection(event) {
-  const file = event.target.files && event.target.files[0];
+  const file =
+  photoInput.files &&
+  photoInput.files[0];
 
   if (!file) {
-    status.textContent = "No photo was selected.";
+
+    status.textContent =
+    "No photo was selected.";
+
     return;
+
   }
 
   if (!file.type.startsWith("image/")) {
-    status.textContent = "Please choose an image file.";
+
+    status.textContent =
+    "Please select a photo.";
+
     return;
+
   }
 
-  status.textContent = "Preparing your photo.";
+  status.textContent =
+  "Preparing your photo.";
 
   try {
-    selectedMediaType = file.type || "image/jpeg";
 
-    const dataURL = await fileToDataURL(file);
+    selectedMediaType =
+    file.type || "image/jpeg";
 
-    selectedImageBase64 = dataURL.split(",")[1];
+    const dataUrl =
+    await readFile(file);
 
-    preview.src = dataURL;
-    preview.style.display = "block";
+    selectedImage =
+    dataUrl.split(",")[1];
 
-    describeBtn.disabled = false;
-    describeBtn.setAttribute("aria-disabled", "false");
+    preview.src =
+    dataUrl;
+
+    preview.style.display =
+    "block";
+
+    describeButton.disabled =
+    false;
+
+    describeButton.setAttribute(
+    "aria-disabled",
+    "false"
+    );
 
     clearResults();
 
     status.textContent =
-      "Photo ready. Ask a question if you want, then double-tap Describe This.";
+    "Photo ready. You can ask a question, then double-tap Describe This.";
 
   } catch (error) {
-    selectedImageBase64 = "";
-    selectedMediaType = "";
 
-    describeBtn.disabled = true;
-    describeBtn.setAttribute("aria-disabled", "true");
+    selectedImage = "";
+
+    describeButton.disabled =
+    true;
+
+    describeButton.setAttribute(
+    "aria-disabled",
+    "true"
+    );
 
     status.textContent =
-      "I could not prepare that photo. Please choose another one.";
+    "I could not prepare that photo. Please try another photo.";
+
   }
-}
 
-function fileToDataURL(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = () => reject(reader.error);
-
-    reader.readAsDataURL(file);
-  });
-}
-
-describeBtn.addEventListener("click", describePhoto);
-
-questionInput.addEventListener("keydown", event => {
-  if (
-    event.key === "Enter" &&
-    selectedImageBase64 &&
-    !describeBtn.disabled
-  ) {
-    event.preventDefault();
-    describePhoto();
-  }
 });
 
-async function describePhoto() {
-  if (!selectedImageBase64) {
-    status.textContent = "Please choose or take a photo first.";
-    return;
-  }
+function readFile(file) {
 
-  describeBtn.disabled = true;
-  describeBtn.setAttribute("aria-disabled", "true");
+  return new Promise(
+  function (resolve, reject) {
 
-  choosePhotoBtn.disabled = true;
-  takePhotoBtn.disabled = true;
+    const reader =
+    new FileReader();
 
-  clearResults();
+    reader.onload =
+    function () {
+      resolve(reader.result);
+    };
 
-  status.textContent = "Looking at your photo. Please wait.";
+    reader.onerror =
+    function () {
+      reject(reader.error);
+    };
 
-  try {
-    const response = await fetch(API_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        image: selectedImageBase64,
-        mediaType: selectedMediaType,
-        question: questionInput.value.trim() || null
-      })
-    });
+    reader.readAsDataURL(file);
 
-    let data;
-
-    try {
-      data = await response.json();
-    } catch {
-      throw new Error("The server returned an unreadable response.");
-    }
-
-    if (!response.ok) {
-      throw new Error(
-        data.error ||
-        data.message ||
-        "Know N'Go could not analyze the photo."
-      );
-    }
-
-    showResults(data);
-
-    status.textContent = "Done.";
-
-  } catch (error) {
-    results.style.display = "none";
-
-    status.textContent =
-      error.message ||
-      "Know N'Go could not analyze the photo. Please try again.";
-
-  } finally {
-    describeBtn.disabled = false;
-    describeBtn.setAttribute("aria-disabled", "false");
-
-    choosePhotoBtn.disabled = false;
-    takePhotoBtn.disabled = false;
-  }
-}
-
-function showResults(data) {
-  clearResults();
-
-  const description =
-    data.description ||
-    data.whatICanSee ||
-    data.seeing ||
-    data.result ||
-    "";
-
-  const answer =
-    data.answer ||
-    "";
-
-  const warning =
-    data.warning ||
-    data.headsUp ||
-    "";
-
-  let closer = "";
-
-  if (typeof data.needsCloserPhoto === "string") {
-    closer = data.needsCloserPhoto;
-  } else if (data.needsCloserPhoto === true) {
-    closer = "A closer photo may help me give you a more accurate answer.";
-  } else if (typeof data.closerPhoto === "string") {
-    closer = data.closerPhoto;
-  } else if (typeof data.closer === "string") {
-    closer = data.closer;
-  }
-
-  const suggestion =
-    data.suggestion ||
-    "";
-
-  setResult(
-    "descriptionBlock",
-    "description",
-    description
-  );
-
-  setResult(
-    "answerBlock",
-    "answer",
-    answer
-  );
-
-  setResult(
-    "warningBlock",
-    "warning",
-    warning
-  );
-
-  setResult(
-    "closerBlock",
-    "closer",
-    closer
-  );
-
-  setResult(
-    "suggestionBlock",
-    "suggestion",
-    suggestion
-  );
-
-  if (
-    !description &&
-    !answer &&
-    !warning &&
-    !closer &&
-    !suggestion
-  ) {
-    setResult(
-      "descriptionBlock",
-      "description",
-      "I received a response, but there was no description to display."
-    );
-  }
-
-  results.style.display = "block";
-  results.focus();
-
-  const spokenText = [
-    description,
-    answer,
-    warning,
-    closer,
-    suggestion
-  ]
-    .filter(Boolean)
-    .join(". ");
-
-  speak(spokenText);
-}
-
-function setResult(blockId, textId, value) {
-  const block = document.getElementById(blockId);
-  const text = document.getElementById(textId);
-
-  if (value) {
-    text.textContent = value;
-    block.hidden = false;
-  } else {
-    text.textContent = "";
-    block.hidden = true;
-  }
-}
-
-function clearResults() {
-  results.style.display = "none";
-
-  [
-    "descriptionBlock",
-    "answerBlock",
-    "warningBlock",
-    "closerBlock",
-    "suggestionBlock"
-  ].forEach(id => {
-    document.getElementById(id).hidden = true;
   });
 
-  [
-    "description",
-    "answer",
-    "warning",
-    "closer",
-    "suggestion"
-  ].forEach(id => {
-    document.getElementById(id).textContent = "";
-  });
 }
 
-function speak(text) {
-  if (!text || !("speechSynthesis" in window)) {
-    return;
-  }
-
-  try {
-    window.speechSynthesis.cancel();
-
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.rate = 0.95;
-
-    window.speechSynthesis.speak(utterance);
-  } catch (error) {
-  }
-}
-</script>
-
-</body>
-</html>
+describeButton.addEventListener(
+"
