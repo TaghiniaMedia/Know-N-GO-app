@@ -1,11 +1,10 @@
-Replace the entire Personal page with this:
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Know N'Go Personal</title>
+
 <style>
 :root {
   --bg:#10151f;
@@ -17,9 +16,11 @@ Replace the entire Personal page with this:
   --orange:#c97d4b;
   --danger:#ff7b7b;
 }
+
 * {
   box-sizing:border-box;
 }
+
 body {
   margin:0;
   background:var(--bg);
@@ -27,10 +28,12 @@ body {
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
   padding:24px 18px 60px;
 }
+
 main {
   max-width:760px;
   margin:auto;
 }
+
 .home {
   display:block;
   width:100%;
@@ -45,24 +48,29 @@ main {
   text-decoration:none;
   text-align:center;
 }
+
 h1 {
   margin:0 0 10px;
   font-size:2rem;
 }
+
 .subtitle {
   color:var(--muted);
   line-height:1.6;
   margin:0 0 36px;
 }
+
 .control-group {
   margin-bottom:34px;
 }
+
 label {
   display:block;
   font-weight:700;
   margin-bottom:12px;
   font-size:1.05rem;
 }
+
 input[type="text"] {
   width:100%;
   min-height:58px;
@@ -73,6 +81,7 @@ input[type="text"] {
   background:var(--panel);
   color:var(--ink);
 }
+
 button {
   width:100%;
   min-height:62px;
@@ -83,26 +92,32 @@ button {
   font-weight:700;
   cursor:pointer;
 }
+
 .action-button {
   margin-bottom:28px;
 }
+
 .take {
   background:var(--green);
   color:white;
 }
+
 .choose {
   background:var(--orange);
   color:white;
 }
+
 .describe {
   background:var(--blue);
   color:white;
   margin-top:12px;
 }
+
 .describe:disabled {
   background:#343b47;
   color:#9299a5;
 }
+
 input[type="file"] {
   position:absolute;
   width:1px;
@@ -114,29 +129,35 @@ input[type="file"] {
   white-space:nowrap;
   border:0;
 }
+
 #previewArea {
   display:none;
   margin:6px 0 34px;
 }
+
 #preview {
   width:100%;
   max-height:420px;
   object-fit:contain;
   border-radius:12px;
 }
+
 #selectedPhotoText {
   margin:12px 0 0;
   color:var(--muted);
 }
+
 #status {
   min-height:28px;
   color:var(--muted);
   margin:28px 0;
   line-height:1.5;
 }
+
 #results {
   margin-top:32px;
 }
+
 .result {
   background:var(--panel);
   border-left:5px solid var(--green);
@@ -144,368 +165,29 @@ input[type="file"] {
   padding:18px;
   margin-bottom:24px;
 }
+
 .result.hazard {
   border-left-color:var(--danger);
 }
+
 .result.closer {
   border-left-color:var(--orange);
 }
+
 .result.suggestion {
   border-left-color:var(--blue);
 }
+
 .result h2 {
   margin:0 0 10px;
   font-size:1.15rem;
 }
+
 .result p {
   margin:0;
   line-height:1.6;
 }
+
 .retry {
   display:none;
-  background:var(--orange);
-  color:white;
-  margin-top:20px;
-}
-@media (prefers-reduced-motion: reduce) {
-  * {
-    scroll-behavior:auto !important;
-    transition:none !important;
-    animation:none !important;
-  }
-}
-</style>
-</head>
-<body>
-<main>
-<a
-  class="home"
-  href="index.html"
-  aria-label="Return to Know N'Go Home"
->
-  ← Home
-</a>
-<h1>Know N'Go Personal</h1>
-<p class="subtitle">
-  Take a photo or choose one from your library, then ask Know N'Go what you want to know.
-</p>
-<div class="control-group">
-  <label for="question">
-    Question about the photo
-  </label>
-  <input
-    type="text"
-    id="question"
-    placeholder="Example: What is this? Is this expired?"
-    autocomplete="off"
-    enterkeyhint="done"
-    aria-describedby="questionHelp"
-  >
-  <p id="questionHelp" class="subtitle" style="margin:10px 0 0;">
-    The question is optional.
-  </p>
-</div>
-<button
-  class="take action-button"
-  id="takePhotoBtn"
-  type="button"
->
-  Take New Photo
-</button>
-<button
-  class="choose action-button"
-  id="choosePhotoBtn"
-  type="button"
->
-  Choose Photo from Library
-</button>
-<input
-  type="file"
-  id="cameraInput"
-  accept="image/*"
-  capture="environment"
->
-<input
-  type="file"
-  id="libraryInput"
-  accept="image/*"
->
-<div id="previewArea">
-  <img
-    id="preview"
-    alt="Selected photo preview"
-  >
-  <p id="selectedPhotoText">
-    Photo selected and ready.
-  </p>
-</div>
-<button
-  class="describe"
-  id="askBtn"
-  type="button"
-  disabled
-  aria-disabled="true"
->
-  Describe Photo
-</button>
-<div
-  id="status"
-  role="status"
-  aria-live="polite"
-  aria-atomic="true"
-></div>
-<div
-  id="results"
-  aria-live="polite"
-  aria-relevant="additions text"
-></div>
-<button
-  class="retry"
-  id="retryBtn"
-  type="button"
->
-  Try Again
-</button>
-</main>
-<script>
-const BACKEND_URL =
-  "https://see-and-say-server-1.onrender.com/describe";
-const takePhotoBtn =
-  document.getElementById("takePhotoBtn");
-const choosePhotoBtn =
-  document.getElementById("choosePhotoBtn");
-const cameraInput =
-  document.getElementById("cameraInput");
-const libraryInput =
-  document.getElementById("libraryInput");
-const previewArea =
-  document.getElementById("previewArea");
-const preview =
-  document.getElementById("preview");
-const askBtn =
-  document.getElementById("askBtn");
-const retryBtn =
-  document.getElementById("retryBtn");
-const questionInput =
-  document.getElementById("question");
-const statusEl =
-  document.getElementById("status");
-const resultsEl =
-  document.getElementById("results");
-let selectedImageBase64 = null;
-let selectedMediaType = "image/jpeg";
-takePhotoBtn.addEventListener("click", () => {
-  cameraInput.value = "";
-  cameraInput.click();
-});
-choosePhotoBtn.addEventListener("click", () => {
-  libraryInput.value = "";
-  libraryInput.click();
-});
-cameraInput.addEventListener("change", () => {
-  loadPhoto(cameraInput.files[0]);
-});
-libraryInput.addEventListener("change", () => {
-  loadPhoto(libraryInput.files[0]);
-});
-function setAskEnabled(enabled) {
-  askBtn.disabled = !enabled;
-  askBtn.setAttribute(
-    "aria-disabled",
-    enabled ? "false" : "true"
-  );
-}
-function loadPhoto(file) {
-  if (!file) {
-    statusEl.textContent =
-      "No photo was selected.";
-    return;
-  }
-  if (!file.type.startsWith("image/")) {
-    statusEl.textContent =
-      "That file is not a supported photo.";
-    return;
-  }
-  selectedMediaType =
-    file.type || "image/jpeg";
-  selectedImageBase64 = null;
-  setAskEnabled(false);
-  resultsEl.innerHTML = "";
-  retryBtn.style.display = "none";
-  statusEl.textContent =
-    "Loading photo.";
-  const reader = new FileReader();
-  reader.onload = () => {
-    const result = reader.result;
-    if (
-      typeof result !== "string" ||
-      !result.includes(",")
-    ) {
-      statusEl.textContent =
-        "I could not read that photo.";
-      return;
-    }
-    selectedImageBase64 =
-      result.split(",")[1];
-    preview.src = result;
-    previewArea.style.display = "block";
-    setAskEnabled(true);
-    statusEl.textContent =
-      "Photo ready. Describe Photo is now available.";
-  };
-  reader.onerror = () => {
-    selectedImageBase64 = null;
-    setAskEnabled(false);
-    statusEl.textContent =
-      "I could not open that photo. Please try another.";
-  };
-  reader.readAsDataURL(file);
-}
-askBtn.addEventListener("click", async () => {
-  await describePhoto();
-});
-retryBtn.addEventListener("click", async () => {
-  await describePhoto();
-});
-async function describePhoto() {
-  if (!selectedImageBase64) {
-    statusEl.textContent =
-      "Take or choose a photo first.";
-    return;
-  }
-  setAskEnabled(false);
-  retryBtn.style.display = "none";
-  resultsEl.innerHTML = "";
-  statusEl.textContent =
-    "Looking at your photo.";
-  try {
-    const response =
-      await fetch(BACKEND_URL, {
-        method:"POST",
-        headers:{
-          "Content-Type":"application/json"
-        },
-        body:JSON.stringify({
-          image:selectedImageBase64,
-          mediaType:selectedMediaType,
-          question:
-            questionInput.value.trim() || null
-        })
-      });
-    let data;
-    try {
-      data = await response.json();
-    } catch {
-      throw new Error(
-        "The server returned an unreadable response."
-      );
-    }
-    if (!response.ok) {
-      throw new Error(
-        data.error ||
-        "Server returned " + response.status
-      );
-    }
-    renderResults(data);
-  } catch (error) {
-    console.error(error);
-    statusEl.textContent =
-      "Know N'Go could not analyze the photo. Try again.";
-    retryBtn.style.display = "block";
-  } finally {
-    setAskEnabled(true);
-  }
-}
-function renderResults(data) {
-  resultsEl.innerHTML = "";
-  const confident =
-    data.confident ||
-    data.whatICanSee ||
-    data.seeing ||
-    "";
-  const hazard =
-    data.hazard || "";
-  const closer =
-    data.needs_closer_photo ||
-    data.needsCloserPhoto ||
-    data.closer ||
-    "";
-  const suggestion =
-    data.suggestion || "";
-  addResult(
-    "What I can see",
-    confident,
-    ""
-  );
-  if (
-    hazard &&
-    hazard.toLowerCase() !==
-    "nothing hazardous spotted"
-  ) {
-    addResult(
-      "Safety Alert",
-      hazard,
-      "hazard"
-    );
-  }
-  if (
-    closer &&
-    !closer.toLowerCase().startsWith("nothing")
-  ) {
-    addResult(
-      "Needs a Closer Photo",
-      closer,
-      "closer"
-    );
-  }
-  if (suggestion) {
-    addResult(
-      "Suggestion",
-      suggestion,
-      "suggestion"
-    );
-  }
-  if (!resultsEl.children.length) {
-    addResult(
-      "Result",
-      "No description was returned.",
-      ""
-    );
-  }
-  statusEl.textContent =
-    "Description complete.";
-  const firstHeading =
-    resultsEl.querySelector("h2");
-  if (firstHeading) {
-    firstHeading.setAttribute(
-      "tabindex",
-      "-1"
-    );
-    firstHeading.focus({
-      preventScroll:false
-    });
-  }
-}
-function addResult(title, text, className) {
-  if (!text) return;
-  const section =
-    document.createElement("section");
-  section.className =
-    "result " + className;
-  const heading =
-    document.createElement("h2");
-  heading.textContent =
-    title;
-  const paragraph =
-    document.createElement("p");
-  paragraph.textContent =
-    text;
-  section.appendChild(heading);
-  section.appendChild(paragraph);
-  resultsEl.appendChild(section);
-}
-</script>
-</body>
-</html>
-
-This batch fixes the crowded spacing, larger tap targets, Home button, VoiceOver status announcements, retry handling, photo selection, and focus moving to the result.
+  background:
