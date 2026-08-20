@@ -3,159 +3,323 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Know N'Go</title>
+<title>Know N'Go Personal</title>
 
 <style>
 * {
   box-sizing: border-box;
 }
 
-:root {
-  --bg: #10151f;
-  --panel: #171d28;
-  --text: #f4f6f8;
-  --muted: #c7ccd4;
-  --personal: #67b7ff;
-  --business: #f2a65a;
-  --border: #394354;
-}
-
 body {
   margin: 0;
-  padding: 40px 20px 80px;
-  background: var(--bg);
-  color: var(--text);
+  padding: 28px 20px 60px;
+  background: #ffffff;
+  color: #111111;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  font-size: 18px;
+  font-size: 22px;
 }
 
 main {
-  width: 100%;
   max-width: 760px;
   margin: 0 auto;
 }
 
-header {
-  text-align: center;
-  margin-bottom: 54px;
-}
-
-.logo {
-  width: 110px;
-  height: 110px;
-  margin: 0 auto 26px;
-  border: 8px solid var(--personal);
-  border-right-color: var(--business);
-  border-bottom-color: var(--business);
-  border-radius: 50%;
-}
-
 h1 {
-  margin: 0 0 18px;
-  font-size: 40px;
-  line-height: 1.1;
+  font-size: 38px;
+  margin: 0 0 36px;
 }
 
-.tagline {
-  margin: 0;
-  color: var(--muted);
-  font-size: 21px;
-  line-height: 1.6;
+button,
+input {
+  font: inherit;
 }
 
-.choice {
+.action {
   display: block;
   width: 100%;
-  text-decoration: none;
-  color: var(--text);
-  background: var(--panel);
-  border: 2px solid var(--border);
-  border-radius: 22px;
-  padding: 30px 26px;
-  margin-bottom: 42px;
+  min-height: 68px;
+  margin: 0 0 32px;
+  padding: 16px;
+  border: 2px solid #111111;
+  border-radius: 12px;
+  background: #ffffff;
+  color: #111111;
 }
 
-.choice:focus {
-  outline: 5px solid white;
-  outline-offset: 5px;
+.action:focus,
+#question:focus {
+  outline: 4px solid #111111;
+  outline-offset: 3px;
 }
 
-.choice h2 {
-  margin: 0 0 16px;
-  font-size: 29px;
+#fileInput {
+  display: none;
 }
 
-.choice p {
-  margin: 0 0 26px;
-  color: var(--muted);
-  line-height: 1.6;
-  font-size: 19px;
+#preview {
+  display: none;
+  width: 100%;
+  height: auto;
+  margin: 0 0 32px;
+  border-radius: 12px;
 }
 
-.open {
+#questionForm {
+  margin-top: 10px;
+}
+
+#question {
   display: block;
   width: 100%;
-  min-height: 64px;
-  padding: 17px 20px;
-  border-radius: 14px;
-  text-align: center;
-  font-size: 20px;
+  min-height: 68px;
+  margin: 0 0 24px;
+  padding: 16px;
+  border: 2px solid #111111;
+  border-radius: 12px;
+  background: #ffffff;
+  color: #111111;
+}
+
+#askButton {
   font-weight: 700;
 }
 
-.personal {
-  border-color: var(--personal);
+#status {
+  min-height: 32px;
+  margin-top: 28px;
+  font-weight: 600;
 }
 
-.personal .open {
-  background: var(--personal);
-  color: #06131f;
-}
-
-.business {
-  border-color: var(--business);
-}
-
-.business .open {
-  background: var(--business);
-  color: #1b1005;
-}
-
-footer {
-  margin-top: 50px;
-  text-align: center;
-  color: var(--muted);
+#answer {
+  margin-top: 24px;
   line-height: 1.6;
+  white-space: pre-wrap;
 }
 </style>
 </head>
 
 <body>
-
 <main>
+  <h1>Know N'Go Personal</h1>
 
-<header>
-  <div class="logo" aria-hidden="true"></div>
+  <button class="action" id="photoButton" type="button">
+    Take or Choose Photo
+  </button>
 
-  <h1>Know N'Go</h1>
+  <input
+    id="fileInput"
+    type="file"
+    accept="image/*"
+    capture="environment"
+    aria-label="Take or choose photo"
+  >
 
-  <p class="tagline">
-    Ask. Understand. Keep moving.
-  </p>
-</header>
+  <img id="preview" alt="Selected photo preview">
 
-<a
-  class="choice personal"
-  href="vision-engine.html"
-  aria-label="Open Know N'Go Personal"
->
-  <h2>Personal</h2>
+  <form id="questionForm">
+    <input
+      id="question"
+      type="text"
+      placeholder="Ask a question"
+      aria-label="Ask a question"
+      autocomplete="off"
+    >
 
-  <p>
-    Ask questions, take or choose photos, understand what is around you,
-    read everyday items, and get clear answers.
-  </p>
+    <button class="action" id="askButton" type="submit">
+      Ask Question
+    </button>
+  </form>
 
-  <span class="open">
-    Open Personal
-  </
+  <div id="status" role="status" aria-live="polite"></div>
+  <div id="answer" role="region" aria-label="Answer" aria-live="polite"></div>
+</main>
+
+<script>
+const BACKEND_URL =
+  "https://see-and-say-server-1.onrender.com/describe";
+
+const photoButton = document.getElementById("photoButton");
+const fileInput = document.getElementById("fileInput");
+const preview = document.getElementById("preview");
+const questionForm = document.getElementById("questionForm");
+const questionInput = document.getElementById("question");
+const askButton = document.getElementById("askButton");
+const status = document.getElementById("status");
+const answer = document.getElementById("answer");
+
+let selectedImage = null;
+let selectedMediaType = null;
+
+photoButton.addEventListener("click", function () {
+  fileInput.click();
+});
+
+fileInput.addEventListener("change", function () {
+  const file = fileInput.files && fileInput.files[0];
+
+  if (!file) {
+    return;
+  }
+
+  selectedMediaType = file.type || "image/jpeg";
+
+  const reader = new FileReader();
+
+  reader.onload = function () {
+    const dataUrl = reader.result;
+
+    selectedImage = dataUrl.split(",")[1];
+
+    preview.src = dataUrl;
+    preview.style.display = "block";
+
+    status.textContent =
+      "Photo ready. Ask a question or press Ask Question for a description.";
+  };
+
+  reader.onerror = function () {
+    status.textContent = "The photo could not be loaded.";
+  };
+
+  reader.readAsDataURL(file);
+});
+
+questionForm.addEventListener("submit", function (event) {
+  event.preventDefault();
+  sendRequest();
+});
+
+async function sendRequest() {
+  const question = questionInput.value.trim();
+
+  if (!question && !selectedImage) {
+    status.textContent = "Type a question or choose a photo first.";
+    questionInput.focus();
+    return;
+  }
+
+  askButton.disabled = true;
+  questionInput.disabled = true;
+  answer.textContent = "";
+  status.textContent = "Thinking...";
+
+  try {
+    const response = await fetch(BACKEND_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        question: question || null,
+        image: selectedImage || null,
+        mediaType: selectedMediaType || null
+      })
+    });
+
+    let data;
+
+    try {
+      data = await response.json();
+    } catch {
+      throw new Error("The server returned an invalid response.");
+    }
+
+    if (!response.ok) {
+      throw new Error(
+        data.error ||
+        data.message ||
+        "The server returned an error."
+      );
+    }
+
+    const result = buildAnswer(data);
+
+    answer.textContent = result;
+    status.textContent = "Answer ready.";
+
+    answer.setAttribute("tabindex", "-1");
+    answer.focus();
+  } catch (error) {
+    console.error(error);
+    status.textContent =
+      error.message || "Unable to connect to Know N'Go. Please try again.";
+  } finally {
+    askButton.disabled = false;
+    questionInput.disabled = false;
+  }
+}
+
+function buildAnswer(data) {
+  if (typeof data === "string") {
+    return data;
+  }
+
+  if (data.answer) {
+    return data.answer;
+  }
+
+  if (data.response) {
+    return data.response;
+  }
+
+  if (data.message) {
+    return data.message;
+  }
+
+  if (data.description) {
+    return data.description;
+  }
+
+  const parts = [];
+
+  if (data.confident) {
+    parts.push(data.confident);
+  }
+
+  if (data.whatICanSee) {
+    parts.push(data.whatICanSee);
+  }
+
+  if (data.seeing) {
+    parts.push(data.seeing);
+  }
+
+  if (
+    data.hazard &&
+    data.hazard !== "Nothing hazardous spotted"
+  ) {
+    parts.push("Hazard: " + data.hazard);
+  }
+
+  if (
+    data.needs_closer_photo &&
+    data.needs_closer_photo !== "Nothing — the photo is clear"
+  ) {
+    parts.push(
+      "Needs a closer photo: " + data.needs_closer_photo
+    );
+  }
+
+  if (data.needsCloserPhoto) {
+    parts.push(
+      "Needs a closer photo: " + data.needsCloserPhoto
+    );
+  }
+
+  if (data.suggestion) {
+    parts.push(data.suggestion);
+  }
+
+  if (data.error) {
+    return data.error;
+  }
+
+  if (parts.length > 0) {
+    return parts.join("\n\n");
+  }
+
+  return "No answer was returned.";
+}
+</script>
+</body>
+</html>
