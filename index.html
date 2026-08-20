@@ -3,117 +3,159 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Know N'Go Personal</title>
+<title>Know N'Go</title>
+
 <style>
 * {
   box-sizing: border-box;
 }
+
+:root {
+  --bg: #10151f;
+  --panel: #171d28;
+  --text: #f4f6f8;
+  --muted: #c7ccd4;
+  --personal: #67b7ff;
+  --business: #f2a65a;
+  --border: #394354;
+}
+
 body {
   margin: 0;
-  padding: 24px 18px 60px;
-  background: #10151f;
-  color: #f2f3f5;
+  padding: 40px 20px 80px;
+  background: var(--bg);
+  color: var(--text);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-}
-main {
-  max-width: 760px;
-  margin: auto;
-}
-h1 {
-  margin-bottom: 8px;
-}
-p {
-  line-height: 1.5;
-}
-button,
-input,
-label {
   font-size: 18px;
 }
-.action {
+
+main {
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 54px;
+}
+
+.logo {
+  width: 110px;
+  height: 110px;
+  margin: 0 auto 26px;
+  border: 8px solid var(--personal);
+  border-right-color: var(--business);
+  border-bottom-color: var(--business);
+  border-radius: 50%;
+}
+
+h1 {
+  margin: 0 0 18px;
+  font-size: 40px;
+  line-height: 1.1;
+}
+
+.tagline {
+  margin: 0;
+  color: var(--muted);
+  font-size: 21px;
+  line-height: 1.6;
+}
+
+.choice {
   display: block;
   width: 100%;
-  padding: 18px;
-  margin: 14px 0;
-  border: 0;
+  text-decoration: none;
+  color: var(--text);
+  background: var(--panel);
+  border: 2px solid var(--border);
+  border-radius: 22px;
+  padding: 30px 26px;
+  margin-bottom: 42px;
+}
+
+.choice:focus {
+  outline: 5px solid white;
+  outline-offset: 5px;
+}
+
+.choice h2 {
+  margin: 0 0 16px;
+  font-size: 29px;
+}
+
+.choice p {
+  margin: 0 0 26px;
+  color: var(--muted);
+  line-height: 1.6;
+  font-size: 19px;
+}
+
+.open {
+  display: block;
+  width: 100%;
+  min-height: 64px;
+  padding: 17px 20px;
   border-radius: 14px;
+  text-align: center;
+  font-size: 20px;
   font-weight: 700;
 }
-#file-input {
-  position: absolute;
-  left: -9999px;
+
+.personal {
+  border-color: var(--personal);
 }
-.photo-button {
-  background: #6fa287;
-  color: #ffffff;
+
+.personal .open {
+  background: var(--personal);
+  color: #06131f;
+}
+
+.business {
+  border-color: var(--business);
+}
+
+.business .open {
+  background: var(--business);
+  color: #1b1005;
+}
+
+footer {
+  margin-top: 50px;
   text-align: center;
-  cursor: pointer;
-}
-#question {
-  width: 100%;
-  padding: 18px;
-  margin-top: 14px;
-  border-radius: 12px;
-  border: 1px solid #777;
-  background: #ffffff;
-  color: #111111;
-}
-#ask-button {
-  background: #4d8fff;
-  color: #ffffff;
-}
-#ask-button:disabled {
-  opacity: 0.5;
-}
-#photo-preview {
-  display: none;
-  width: 100%;
-  max-height: 360px;
-  object-fit: contain;
-  margin-top: 18px;
-  border-radius: 12px;
-}
-#status {
-  margin-top: 18px;
-  font-weight: 600;
-}
-#results {
-  margin-top: 24px;
-  padding: 18px;
-  background: #171d29;
-  border-radius: 14px;
-}
-.result-section {
-  margin-bottom: 20px;
-}
-.result-section h2 {
-  font-size: 20px;
-  margin-bottom: 6px;
-}
-.home-link {
-  display: inline-block;
-  margin-bottom: 20px;
-  color: #ffffff;
-  font-size: 18px;
+  color: var(--muted);
+  line-height: 1.6;
 }
 </style>
 </head>
+
 <body>
+
 <main>
-<a class="home-link" href="index.html" aria-label="Back to Know N'Go home">
-Back to Home
-</a>
-<h1>Personal</h1>
-<p>
-Take or choose a photo and Know N'Go will help describe what is in front of you.
-You can also ask a specific question about the photo.
-</p>
 
-<input
-type=“file”
-id=“file-input”
-accept=“image/*”
-capture=“environment”
-aria-label=“Take or choose a photo”
+<header>
+  <div class="logo" aria-hidden="true"></div>
 
-<label for=“file-input” class=“action photo-button
+  <h1>Know N'Go</h1>
+
+  <p class="tagline">
+    Ask. Understand. Keep moving.
+  </p>
+</header>
+
+<a
+  class="choice personal"
+  href="vision-engine.html"
+  aria-label="Open Know N'Go Personal"
+>
+  <h2>Personal</h2>
+
+  <p>
+    Ask questions, take or choose photos, understand what is around you,
+    read everyday items, and get clear answers.
+  </p>
+
+  <span class="open">
+    Open Personal
+  </
