@@ -6,127 +6,127 @@
 <title>Know N'Go</title>
 <style>
 :root {
-  --bg: #10151f;
-  --panel: #171d29;
-  --ink: #f2f3f5;
-  --muted: #9aa4b2;
-  --personal: #6fa287;
-  --pro: #c97d4b;
+--bg: #10151f;
+--panel: #171d29;
+--ink: #f2f3f5;
+--muted: #9aa4b2;
+--personal: #6fa287;
+--pro: #c97d4b;
 }
 
 * {
-  box-sizing: border-box;
+box-sizing: border-box;
 }
 
 body {
-  margin: 0;
-  padding: 32px 20px 60px;
-  background: var(--bg);
-  color: var(--ink);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+margin: 0;
+padding: 32px 20px 60px;
+background: var(--bg);
+color: var(--ink);
+font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
 main {
-  max-width: 760px;
-  margin: 0 auto;
+max-width: 760px;
+margin: 0 auto;
 }
 
 .logo {
-  display: block;
-  margin: 0 auto 24px;
-  width: 96px;
-  height: 96px;
+display: block;
+margin: 0 auto 24px;
+width: 96px;
+height: 96px;
 }
 
 h1 {
-  margin: 0;
-  text-align: center;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 2.3rem;
+margin: 0;
+text-align: center;
+font-family: Georgia, "Times New Roman", serif;
+font-size: 2.3rem;
 }
 
 .tagline {
-  margin: 8px 0 40px;
-  text-align: center;
-  color: var(--muted);
-  font-size: 1.1rem;
+margin: 8px 0 40px;
+text-align: center;
+color: var(--muted);
+font-size: 1.1rem;
 }
 
 .card {
-  display: block;
-  width: 100%;
-  min-height: 150px;
-  margin-bottom: 30px;
-  padding: 26px 22px;
-  background: var(--panel);
-  color: var(--ink);
-  text-decoration: none;
-  border-radius: 16px;
-  border-left: 6px solid transparent;
+display: block;
+width: 100%;
+min-height: 150px;
+margin-bottom: 30px;
+padding: 26px 22px;
+background: var(--panel);
+color: var(--ink);
+text-decoration: none;
+border-radius: 16px;
+border-left: 6px solid transparent;
 }
 
 .card:focus {
-  outline: 4px solid #ffffff;
-  outline-offset: 4px;
+outline: 4px solid #ffffff;
+outline-offset: 4px;
 }
 
 .card.personal {
-  border-left-color: var(--personal);
+border-left-color: var(--personal);
 }
 
 .card.pro {
-  border-left-color: var(--pro);
+border-left-color: var(--pro);
 }
 
 .eyebrow {
-  display: block;
-  margin-bottom: 10px;
-  font-size: 0.85rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
+display: block;
+margin-bottom: 10px;
+font-size: 0.85rem;
+font-weight: 700;
+text-transform: uppercase;
+letter-spacing: 0.08em;
 }
 
 .personal .eyebrow {
-  color: var(--personal);
+color: var(--personal);
 }
 
 .pro .eyebrow {
-  color: var(--pro);
+color: var(--pro);
 }
 
 h2 {
-  margin: 0 0 10px;
-  font-size: 1.6rem;
+margin: 0 0 10px;
+font-size: 1.6rem;
 }
 
 .card p {
-  margin: 0;
-  color: var(--muted);
-  font-size: 1.05rem;
-  line-height: 1.5;
+margin: 0;
+color: var(--muted);
+font-size: 1.05rem;
+line-height: 1.5;
 }
 
 .open {
-  display: block;
-  margin-top: 18px;
-  font-weight: 700;
-  font-size: 1.05rem;
+display: block;
+margin-top: 18px;
+font-weight: 700;
+font-size: 1.05rem;
 }
 
 .personal .open {
-  color: var(--personal);
+color: var(--personal);
 }
 
 .pro .open {
-  color: var(--pro);
+color: var(--pro);
 }
 
 footer {
-  margin-top: 42px;
-  text-align: center;
-  color: var(--muted);
-  font-size: 0.9rem;
+margin-top: 42px;
+text-align: center;
+color: var(--muted);
+font-size: 0.9rem;
 }
 </style>
 </head>
@@ -135,4 +135,29 @@ footer {
 <main>
 
 <svg class="logo" viewBox="0 0 100 100" aria-hidden="true">
-  
+<circle cx="50" cy="50" r="45" fill="none" stroke="#6fa287" stroke-width="6"/>
+<path d="M30 52 L45 65 L72 35" fill="none" stroke="#6fa287" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+
+<h1>Know N'Go</h1>
+<p class="tagline">Your accessible AI concierge</p>
+
+<a class="card personal" href="vision.html">
+<span class="eyebrow">Personal</span>
+<h2>Know N'Go Personal</h2>
+<p>Point your camera at the world and get trustworthy words back — for shopping, dining, travel, and daily life.</p>
+<span class="open">Open Personal &rarr;</span>
+</a>
+
+<a class="card pro" href="pro-dashboard.html">
+<span class="eyebrow">Pro</span>
+<h2>Know N'Go Pro</h2>
+<p>AI tools for businesses — realtors, contractors, and more.</p>
+<span class="open">Open Pro &rarr;</span>
+</a>
+
+<footer>&copy; 2026 Zeus Enterprises</footer>
+
+</main>
+</body>
+</html>
