@@ -4,12 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Know N'Go Personal</title>
-
 <style>
 * {
   box-sizing: border-box;
 }
-
 body {
   margin: 0;
   padding: 28px 20px 60px;
@@ -18,22 +16,18 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   font-size: 20px;
 }
-
 main {
   max-width: 760px;
   margin: 0 auto;
 }
-
 h1 {
   font-size: 36px;
   margin: 0 0 36px;
 }
-
 button,
 input {
   font: inherit;
 }
-
 .action,
 #questionInput {
   display: block;
@@ -47,42 +41,48 @@ input {
   color: #111111;
   font-size: 22px;
 }
-
 .action {
   font-weight: 700;
   cursor: pointer;
 }
-
 #questionInput {
   font-weight: 500;
 }
-
 #photoInput {
   display: none;
 }
-
 #preview {
   display: none;
   width: 100%;
   max-height: 420px;
   object-fit: contain;
-  margin-bottom: 30px;
+  margin-bottom: 12px;
   border-radius: 14px;
 }
-
+#clearPhotoButton {
+  display: none;
+}
 #response {
   margin-top: 10px;
   font-size: 22px;
   line-height: 1.5;
   white-space: pre-wrap;
 }
-
 .status {
   font-weight: 600;
 }
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
 </style>
 </head>
-
 <body>
 <main>
   <h1>Know N'Go Personal</h1>
@@ -98,10 +98,19 @@ input {
   <input
     id="photoInput"
     type="file"
-    accept="image/*"
-    capture="environment">
+    accept="image/*">
 
   <img id="preview" alt="Selected photo preview">
+
+  <button
+    id="clearPhotoButton"
+    class="action"
+    type="button"
+    aria-label="Remove selected photo">
+    Remove Photo
+  </button>
+
+  <div id="photoStatus" class="visually-hidden" role="status" aria-live="polite"></div>
 
   <input
     id="questionInput"
@@ -131,6 +140,8 @@ const SERVER_URL = "https://see-and-say-server-1.onrender.com";
 
 const photoButton = document.getElementById("photoButton");
 const photoInput = document.getElementById("photoInput");
+const clearPhotoButton = document.getElementById("clearPhotoButton");
+const photoStatus = document.getElementById("photoStatus");
 const questionInput = document.getElementById("questionInput");
 const askButton = document.getElementById("askButton");
 const preview = document.getElementById("preview");
@@ -145,25 +156,31 @@ photoButton.addEventListener("click", () => {
 
 photoInput.addEventListener("change", () => {
   const file = photoInput.files[0];
-
   if (!file) {
     return;
   }
-
   currentMediaType = file.type || "image/jpeg";
-
   const reader = new FileReader();
-
   reader.onload = () => {
     const result = reader.result;
     currentImage = result.split(",")[1];
-
     preview.src = result;
     preview.style.display = "block";
     preview.alt = "Selected photo ready for analysis";
+    clearPhotoButton.style.display = "block";
+    photoStatus.textContent = "Photo selected.";
   };
-
   reader.readAsDataURL(file);
+});
+
+clearPhotoButton.addEventListener("click", () => {
+  currentImage = "";
+  currentMediaType = "";
+  photoInput.value = "";
+  preview.src = "";
+  preview.style.display = "none";
+  clearPhotoButton.style.display = "none";
+  photoStatus.textContent = "Photo removed.";
 });
 
 async function submitQuestion() {
@@ -222,7 +239,6 @@ async function submitQuestion() {
       data.description ||
       data.message ||
       "No response was returned.";
-
   } catch (error) {
     response.textContent = "Unable to get a response right now.";
     console.error(error);
