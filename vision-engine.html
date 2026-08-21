@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Know N'Go Personal</title>
+<title>Kelvara Personal</title>
 <style>
 * {
 box-sizing: border-box;
@@ -72,7 +72,7 @@ font-weight: 600;
 </head>
 <body>
 <main>
-<h1>Know N'Go Personal</h1>
+<h1>Kelvara Personal</h1>
 
 <button
 id="photoButton"
@@ -189,4 +189,36 @@ question: text
 const data = await fetchResponse.json();
 
 if (!fetchResponse.ok) {
-throw new Error
+throw new Error(
+data.error ||
+data.message ||
+"The server could not complete the request."
+);
+}
+
+response.textContent =
+data.answer ||
+data.response ||
+data.result ||
+data.description ||
+data.message ||
+"No response was returned.";
+} catch (error) {
+response.textContent = "Unable to get a response right now.";
+console.error(error);
+} finally {
+askButton.disabled = false;
+}
+}
+
+askButton.addEventListener("click", submitQuestion);
+
+questionInput.addEventListener("keydown", (event) => {
+if (event.key === "Enter") {
+event.preventDefault();
+submitQuestion();
+}
+});
+</script>
+</body>
+</html>
