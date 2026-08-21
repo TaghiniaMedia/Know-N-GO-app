@@ -6,133 +6,111 @@
 <title>Know N'Go Personal</title>
 <style>
 * {
-  box-sizing: border-box;
+box-sizing: border-box;
 }
 body {
-  margin: 0;
-  padding: 28px 20px 60px;
-  background: #ffffff;
-  color: #111111;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  font-size: 20px;
+margin: 0;
+padding: 28px 20px 60px;
+background: #ffffff;
+color: #111111;
+font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+font-size: 20px;
 }
 main {
-  max-width: 760px;
-  margin: 0 auto;
+max-width: 760px;
+margin: 0 auto;
 }
 h1 {
-  font-size: 36px;
-  margin: 0 0 36px;
+font-size: 36px;
+margin: 0 0 36px;
 }
 button,
 input {
-  font: inherit;
+font: inherit;
 }
 .action,
 #questionInput {
-  display: block;
-  width: 100%;
-  min-height: 68px;
-  margin-bottom: 30px;
-  padding: 16px 20px;
-  border: 2px solid #111111;
-  border-radius: 16px;
-  background: #ffffff;
-  color: #111111;
-  font-size: 22px;
+display: block;
+width: 100%;
+min-height: 68px;
+margin-bottom: 30px;
+padding: 16px 20px;
+border: 2px solid #111111;
+border-radius: 16px;
+background: #ffffff;
+color: #111111;
+font-size: 22px;
 }
 .action {
-  font-weight: 700;
-  cursor: pointer;
+font-weight: 700;
+cursor: pointer;
 }
 #questionInput {
-  font-weight: 500;
+font-weight: 500;
 }
 #photoInput {
-  display: none;
+display: none;
 }
 #preview {
-  display: none;
-  width: 100%;
-  max-height: 420px;
-  object-fit: contain;
-  margin-bottom: 12px;
-  border-radius: 14px;
-}
-#clearPhotoButton {
-  display: none;
+display: none;
+width: 100%;
+max-height: 420px;
+object-fit: contain;
+margin-bottom: 30px;
+border-radius: 14px;
 }
 #response {
-  margin-top: 10px;
-  font-size: 22px;
-  line-height: 1.5;
-  white-space: pre-wrap;
+margin-top: 10px;
+font-size: 22px;
+line-height: 1.5;
+white-space: pre-wrap;
 }
 .status {
-  font-weight: 600;
-}
-.visually-hidden {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  margin: -1px;
-  padding: 0;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  border: 0;
+font-weight: 600;
 }
 </style>
 </head>
 <body>
 <main>
-  <h1>Know N'Go Personal</h1>
+<h1>Know N'Go Personal</h1>
 
-  <button
-    id="photoButton"
-    class="action"
-    type="button"
-    aria-label="Take or choose a photo">
-    Take or Choose a Photo
-  </button>
+<button
+id="photoButton"
+class="action"
+type="button"
+aria-label="Take or choose a photo">
+Take or Choose a Photo
+</button>
 
-  <input
-    id="photoInput"
-    type="file"
-    accept="image/*">
+<input
+id="photoInput"
+type="file"
+accept="image/*"
+capture="environment">
 
-  <img id="preview" alt="Selected photo preview">
+<img id="preview" alt="Selected photo preview">
 
-  <button
-    id="clearPhotoButton"
-    class="action"
-    type="button"
-    aria-label="Remove selected photo">
-    Remove Photo
-  </button>
+<input
+id="questionInput"
+type="text"
+placeholder="Can you help me?"
+aria-label="Ask a question"
+enterkeyhint="send"
+autocomplete="off">
 
-  <div id="photoStatus" class="visually-hidden" role="status" aria-live="polite"></div>
+<button
+id="askButton"
+class="action"
+type="button">
+Ask Question
+</button>
 
-  <input
-    id="questionInput"
-    type="text"
-    placeholder="Can you help me?"
-    aria-label="Ask a question"
-    enterkeyhint="send"
-    autocomplete="off">
-
-  <button
-    id="askButton"
-    class="action"
-    type="button">
-    Ask Question
-  </button>
-
-  <div
-    id="response"
-    role="status"
-    aria-live="polite"
-    aria-atomic="true">
-  </div>
+<div
+id="response"
+role="status"
+aria-live="polite"
+aria-atomic="true">
+</div>
 </main>
 
 <script>
@@ -140,8 +118,6 @@ const SERVER_URL = "https://see-and-say-server-1.onrender.com";
 
 const photoButton = document.getElementById("photoButton");
 const photoInput = document.getElementById("photoInput");
-const clearPhotoButton = document.getElementById("clearPhotoButton");
-const photoStatus = document.getElementById("photoStatus");
 const questionInput = document.getElementById("questionInput");
 const askButton = document.getElementById("askButton");
 const preview = document.getElementById("preview");
@@ -151,110 +127,66 @@ let currentImage = "";
 let currentMediaType = "";
 
 photoButton.addEventListener("click", () => {
-  photoInput.click();
+photoInput.click();
 });
 
 photoInput.addEventListener("change", () => {
-  const file = photoInput.files[0];
-  if (!file) {
-    return;
-  }
-  currentMediaType = file.type || "image/jpeg";
-  const reader = new FileReader();
-  reader.onload = () => {
-    const result = reader.result;
-    currentImage = result.split(",")[1];
-    preview.src = result;
-    preview.style.display = "block";
-    preview.alt = "Selected photo ready for analysis";
-    clearPhotoButton.style.display = "block";
-    photoStatus.textContent = "Photo selected.";
-  };
-  reader.readAsDataURL(file);
-});
-
-clearPhotoButton.addEventListener("click", () => {
-  currentImage = "";
-  currentMediaType = "";
-  photoInput.value = "";
-  preview.src = "";
-  preview.style.display = "none";
-  clearPhotoButton.style.display = "none";
-  photoStatus.textContent = "Photo removed.";
+const file = photoInput.files[0];
+if (!file) {
+return;
+}
+currentMediaType = file.type || "image/jpeg";
+const reader = new FileReader();
+reader.onload = () => {
+const result = reader.result;
+currentImage = result.split(",")[1];
+preview.src = result;
+preview.style.display = "block";
+preview.alt = "Selected photo ready for analysis";
+response.textContent = "Photo ready.";
+};
+reader.readAsDataURL(file);
 });
 
 async function submitQuestion() {
-  const text = questionInput.value.trim();
-
-  if (!text && !currentImage) {
-    response.textContent = "Please enter a question or choose a photo.";
-    questionInput.focus();
-    return;
-  }
-
-  response.textContent = "Working...";
-  askButton.disabled = true;
-
-  try {
-    let fetchResponse;
-
-    if (currentImage) {
-      fetchResponse = await fetch(`${SERVER_URL}/describe`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          image: currentImage,
-          mediaType: currentMediaType,
-          question: text || "Describe this image clearly."
-        })
-      });
-    } else {
-      fetchResponse = await fetch(`${SERVER_URL}/ask`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          question: text
-        })
-      });
-    }
-
-    const data = await fetchResponse.json();
-
-    if (!fetchResponse.ok) {
-      throw new Error(
-        data.error ||
-        data.message ||
-        "The server could not complete the request."
-      );
-    }
-
-    response.textContent =
-      data.answer ||
-      data.response ||
-      data.result ||
-      data.description ||
-      data.message ||
-      "No response was returned.";
-  } catch (error) {
-    response.textContent = "Unable to get a response right now.";
-    console.error(error);
-  } finally {
-    askButton.disabled = false;
-  }
+const text = questionInput.value.trim();
+if (!text && !currentImage) {
+response.textContent = "Please enter a question or choose a photo.";
+questionInput.focus();
+return;
 }
 
-askButton.addEventListener("click", submitQuestion);
+response.textContent = "Working...";
+askButton.disabled = true;
 
-questionInput.addEventListener("keydown", (event) => {
-  if (event.key === "Enter") {
-    event.preventDefault();
-    submitQuestion();
-  }
+try {
+let fetchResponse;
+
+if (currentImage) {
+fetchResponse = await fetch(`${SERVER_URL}/describe`, {
+method: "POST",
+headers: {
+"Content-Type": "application/json"
+},
+body: JSON.stringify({
+image: currentImage,
+mediaType: currentMediaType,
+question: text || "Describe this image clearly."
+})
 });
-</script>
-</body>
-</html>
+} else {
+fetchResponse = await fetch(`${SERVER_URL}/ask`, {
+method: "POST",
+headers: {
+"Content-Type": "application/json"
+},
+body: JSON.stringify({
+question: text
+})
+});
+}
+
+const data = await fetchResponse.json();
+
+if (!fetchResponse.ok) {
+throw new Error
